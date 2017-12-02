@@ -487,6 +487,11 @@ Crafty.c('MonsterBodyActor', {
     required: "2D, Canvas, Collision",
     init: function(){
         this.isReviving = false;
+        this.collision([1,13,
+                        14,13,
+                        14,15,
+                        1,15
+                    ])
     },
     revive: function(){
         this.destroy();
