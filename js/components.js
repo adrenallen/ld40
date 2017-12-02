@@ -1,12 +1,15 @@
 const movementSpeed = 100;
 
-
-
 Crafty.c('PlayerCharacter', {
-    required: "2D, Canvas, Collision, Fourway, spr_player",
+    required: "2D, Canvas, Collision, Fourway, Motion, spr_player",
     init: function(){
         this.origin("center");
         this.health = 50;
+
+        //TODO - change sprite direction based on which way pointing
+        this.direction = 1;
+
+
         //TODO - some kind of timeout so you can only be hurt so many times a second
         
         this.fourway(movementSpeed);
@@ -69,21 +72,40 @@ Crafty.c('AllyCharacter', {
 
 //TODO - make the monster sprite sheet varied and pick a random row for different looks
 Crafty.c('MonsterCharacter1', {
-    required: "2D, Canvas, MonsterActor, spr_monster1, SpriteAnimation",
+    required: "2D, Canvas, MonsterActor, spr_monster1, Motion, SpriteAnimation",
     init: function(){
         this.x = Crafty.viewport.width*Math.random();
         this.y = Crafty.viewport.height*Math.random();
         this.origin("center");
         this.damage = 15;
 
+        this.speed = 50;
+
+
+        this.findPlayerInterval = setInterval(function(mon){ mon.moveTowardsPlayer(); }, 100, this)
+
+
         this.reel("idle", 1000, [
             [0,0], [1,0], [2,0], [3,0]
         ]);
 
         this.animate("idle", -1);
+
+
+        
+
         //TODO better collision
         // this.collision([-4, 8, -4, 4, 4, 4, 4, 8]);
     },
+    moveTowardsPlayer: function(){
+        try{
+            delta = findPlayerDelta(this.x, this.y);
+            this.velocity().x = delta.vx*this.speed;
+            this.velocity().y = delta.vy*this.speed;
+        }catch(e){
+            clearInterval(this.findPlayerInterval);
+        }
+    }
 
 });
 
@@ -105,6 +127,7 @@ Crafty.c('MonsterActor', {
         this.health = 15;   
 
         this.onHit('Projectile', this.takeBulletDamage);
+        this.onHit('PlayerBullet', this.takeBulletDamage);
     },
     takeBulletDamage: function(hitData){
         
@@ -156,7 +179,7 @@ Crafty.c('Projectile', {
 });
 
 Crafty.c('PlayerBullet', {
-    required: "2D, Canvas, Projectile, Motion, spr_bullet",
+    required: "2D, Canvas, Motion, spr_bullet",
     init: function(){
         
         this.origin('center');
@@ -166,28 +189,39 @@ Crafty.c('PlayerBullet', {
 
     clickDirection: function(x,y){
 
-        // //set rotation
-        deltaY = y-this.attr('y');
-        deltaX = x-this.attr('x');
+        calcs = calculateVXYRotation(x, y, this.attr('x'), this.attr('y'));
 
-        console.log('y', deltaY);
-        console.log('x', deltaX);
-
-        RAD2DEG = 180 / Math.PI;
-        rotRads = Math.atan2(deltaY, deltaX);
-
-        rotDeg = (rotRads * RAD2DEG)+90;
-
-        this.attr({rotation: rotDeg});
-
-        vx = Math.cos(rotRads);
-        vy = Math.sin(rotRads);
+        this.attr({rotation: calcs.rotation});
         
         //set velocity
-        this.velocity().x = vx/(Math.abs(vx)+Math.abs(vy))*this.bulletSpeed;
-        this.velocity().y = vy/(Math.abs(vx)+Math.abs(vy))*this.bulletSpeed;
+        this.velocity().x = calcs.vx*this.bulletSpeed;
+        this.velocity().y = calcs.vy*this.bulletSpeed;
 
 
         
     }
 });
+
+function calculateVXYRotation(destX, destY, originX, originY){
+         // //set rotation
+         deltaY = destY-originY;
+         deltaX = destX-originX;
+ 
+         RAD2DEG = 180 / Math.PI;
+         rotRads = Math.atan2(deltaY, deltaX);
+ 
+         rotDeg = (rotRads * RAD2DEG)+90;
+ 
+         vx = Math.cos(rotRads);
+         vy = Math.sin(rotRads);
+         
+        return {vx: vx/(Math.abs(vx)+Math.abs(vy)),
+                vy: vy/(Math.abs(vx)+Math.abs(vy)),
+                rotation: rotDeg};
+}
+
+
+function findPlayerDelta(x,y){
+    player = Crafty('PlayerCharacter').get(0);
+    return calculateVXYRotation(player.x, player.y, x,y);
+}
