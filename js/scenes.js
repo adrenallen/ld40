@@ -7,7 +7,17 @@ var assetsObj = {
                 spr_player: [0,0]
             },
             paddingX: 0,
-            paddingY: 0,
+            paddingY: 1,
+            paddingAroundBorder: 0
+        },
+        "sprites/ally1.png" :{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_ally1: [0,0]
+            },
+            paddingX: 0,
+            paddingY: 1,
             paddingAroundBorder: 0
         },
         "sprites/bullet.png" :{
@@ -17,7 +27,7 @@ var assetsObj = {
                 spr_bullet: [0,0]
             },
             paddingX: 0,
-            paddingY: 0,
+            paddingY: 1,
             paddingAroundBorder: 0
         },
         "sprites/monster1.png" :{
@@ -56,6 +66,10 @@ Crafty.scene('Game', function(){
 
     //add player to the game!
     this.player = Crafty.e("PlayerCharacter");
+
+    this.player.x=25;
+    this.player.y=150;
+
     this.player = Crafty.e("MonsterCharacter1");
 
     Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
