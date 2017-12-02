@@ -67,6 +67,8 @@ Crafty.scene('Game', function(){
     //add player to the game!
     this.player = Crafty.e("PlayerCharacter");
 
+    Crafty.e("TopBuildings");
+
     this.player.x=25;
     this.player.y=150;
 
