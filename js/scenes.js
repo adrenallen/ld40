@@ -24,10 +24,11 @@ var assetsObj = {
             tile: 16,
             tileh: 16,
             map: {
-                spr_monster1: [0,0]
+                spr_monster1: [0,0],
+                spr_monster1_body: [0,1]
             },
             paddingX: 0,
-            paddingY: 0,
+            paddingY: 1,
             paddingAroundBorder: 0
         }
     }
@@ -41,19 +42,13 @@ Crafty.scene('Loading', function(){
     
     //load player sprite sheet
     Crafty.load(assetsObj, function(){
-        
-        // Crafty.sprite(16, 'assets/sprites/player.png', {
-        //     spr_player: [0,0]
-        // });
-
-        Crafty.e('2D, Canvas, spr_player').attr({x: 50, y:50});
 
         Crafty.scene('Game');
     });
 });
 
 Crafty.scene('GameOver', function(){
-    Crafty.e("2D, DOM, Text").attr({ x: 100, y: 100 }).text("You died!");
+    Crafty.e("2D, Canvas, Text").attr({ x: 100, y: 100 }).text("You died!");
 });
 
 Crafty.scene('Game', function(){
@@ -63,7 +58,17 @@ Crafty.scene('Game', function(){
     this.player = Crafty.e("PlayerCharacter");
     this.player = Crafty.e("MonsterCharacter1");
 
+    Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
+        if (e.key == Crafty.keys.E){
+            Crafty('PlayerCharacter').get(0).attemptReviveBody();    
+        }
+    });
 
+    Crafty.e("2D, Keyboard").bind('KeyUp', function(e){
+        if (e.key == Crafty.keys.E){
+            Crafty('PlayerCharacter').get(0).stopAttemptReviveBody();    
+        }
+    });
     
     this.clickTracker = Crafty.e("2D");
     Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousedown", function(e){

@@ -8,9 +8,12 @@ Crafty.c('PlayerCharacter', {
         this.x = 50;
         this.y = 50;
         this.origin("center");
+        this.health = 50;
+        //TODO - some kind of timeout so you can only be hurt so many times a second
         
         this.fourway(movementSpeed);
         this.onHit('Projectile', this.takeBulletDamage);
+        this.onHit('MonsterActor', this.takeMonsterDamage);
     },
 
     fireBullet: function(e){
@@ -25,10 +28,30 @@ Crafty.c('PlayerCharacter', {
 
         // Crafty.e("2D, Canvas, Color").attr({x: e.offsetX, y: e.offsetY, w:10, h:10}).color('red');
     },
+
+    //attempt to revive a body you are touching
+    attemptReviveBody: function(){
+        this.checkHits('MonsterBodyActor').bind('HitOn', function(hitData){
+            //hitData[0].obj is the obj
+            hitData[0].obj.revive();
+        });
+    },
+
+    stopAttemptReviveBody: function(){
+        this.ignoreHits('MonsterBodyActor');
+    },
+
     takeBulletDamage: function(hitData){
-        
-        this.health-=hitData[0].obj.attr('damage');
+        this.takeDamage(hitData[0].obj.attr('damage'));
         hitData[0].obj.destroy();
+    },
+    takeMonsterDamage: function(hitData){
+        console.log(hitData);
+        this.takeDamage(hitData[0].obj.attr('damage'));
+    },
+    takeDamage: function(dmg){
+        this.health-=dmg;
+        
         if (this.health < 1){
             this.death();
         }
@@ -38,17 +61,33 @@ Crafty.c('PlayerCharacter', {
     }
 });
 
+Crafty.c('AllyCharacter', {
+    required: "2D, Canvas, Collision, spr_player",
+    init: function(){
+
+    }
+});
+
+
 //TODO - make the monster sprite sheet varied and pick a random row for different looks
 Crafty.c('MonsterCharacter1', {
-    required: "2D, Canvas, MonsterActor, spr_monster1, WireHitBox",
+    required: "2D, Canvas, MonsterActor, spr_monster1",
     init: function(){
         this.x = Crafty.viewport.width*Math.random();
         this.y = Crafty.viewport.height*Math.random();
         this.origin("center");
-
+        this.damage = 15;
         //TODO better collision
         // this.collision([-4, 8, -4, 4, 4, 4, 4, 8]);
     },
+
+});
+
+Crafty.c('MonsterBody1', {
+    required: "2D, Canvas, MonsterBodyActor, spr_monster1_body",
+    init: function(){
+        this.origin("center");
+    }
 
 });
 
@@ -70,7 +109,25 @@ Crafty.c('MonsterActor', {
     },
     death: function(){
         this.destroy();
-        this.player = Crafty.e("MonsterCharacter1");
+        monsterBody = Crafty.e("MonsterBody1");
+        monsterBody.x = this.x;
+        monsterBody.y = this.y;
+        Crafty.e("MonsterCharacter1");
+        //TODO - spawn dead body that can be revived!!
+    }
+});
+
+//dead bodies of monsters
+Crafty.c('MonsterBodyActor', {
+    required: "2D, Canvas, Collision",
+    init: function(){
+
+    },
+    revive: function(){
+        newAlly = Crafty.e('AllyCharacter');
+        newAlly.x = this.x;
+        newAlly.y = this.y;
+        this.destroy();
     }
 });
 
