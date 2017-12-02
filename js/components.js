@@ -15,12 +15,14 @@ Crafty.c('PlayerCharacterArms', {
         if(this.rotation > 90 || this.rotation < -90){
             if(!this.flipped){
                 this.flip();
+                Crafty('PlayerCharacter').get(0).flip();
                 this.flipped = true;
             }
             this.rotation-=180;
         }else{
             if(this.flipped){
                 this.unflip();
+                Crafty('PlayerCharacter').get(0).unflip();
                 this.flipped = false;
             }
         }
@@ -38,6 +40,10 @@ Crafty.c('PlayerCharacter', {
                         12, 16,
                         3, 16,
                         3, 8]);
+
+
+        this.healthBar = Crafty.e('PlayerHealthBar');
+        this.healthBar.maxHealth = this.health;
 
         //TODO - change sprite direction based on which way pointing
         this.direction = 1;
@@ -59,6 +65,11 @@ Crafty.c('PlayerCharacter', {
 
         //this is now done via the monster classes
         // this.onHit('MonsterActor', this.takeMonsterDamage);
+
+        //TODO make this show the run animation (that doesn't exist yet ;P)
+        this.bind("MotionChange", function(e){
+            // console.log(e)
+        });
 
         this.onHit('Solid', function(e){
             hitData = e[0];
@@ -171,6 +182,7 @@ Crafty.c('PlayerCharacter', {
 
         Crafty('DamageOverlay').get(0).showDamage();
         
+        this.healthBar.adjustHealthBar(this.health);
         if (this.health < 1){
             this.death();
         }
