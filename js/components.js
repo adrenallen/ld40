@@ -72,6 +72,28 @@ Crafty.c('PlayerCharacter', {
               }
         });
 
+        this.onHit('SolidBottomPlayerOnly', function(e){
+            hitData = e[0];
+            if (hitData.type === 'SAT') { // SAT, advanced collision resolution
+                // move player back by amount of overlap
+                this.y -= hitData.overlap * hitData.normal.y;
+              } else { // MBR, simple collision resolution
+                // move player to position before he moved (on respective axis)
+                // this[evt.axis] = evt.oldValue;
+              }
+        });
+
+        this.onHit('SolidLeftPlayerOnly', function(e){
+            hitData = e[0];
+            if (hitData.type === 'SAT') { // SAT, advanced collision resolution
+                // move player back by amount of overlap
+                this.x -= hitData.overlap * hitData.normal.x;
+              } else { // MBR, simple collision resolution
+                // move player to position before he moved (on respective axis)
+                // this[evt.axis] = evt.oldValue;
+              }
+        });
+
         this.onHit('MoveBox', function(e){
             hitData = e[0];
             if (hitData.type === 'SAT') { // SAT, advanced collision resolution
@@ -80,6 +102,8 @@ Crafty.c('PlayerCharacter', {
                 Game.moveMap(hitData.overlap * hitData.normal.x);
               } 
         });
+
+        
     },
 
     fireBullet: function(e){
@@ -192,7 +216,7 @@ Crafty.c('AllyCharacterArms', {
 Crafty.c('AllyCharacter', {
     required: "2D, Canvas, Collision, SpriteAnimation, Motion, spr_ally1, Team1, Scrolls",
     init: function(){
-        this.speed = 75;
+        this.speed = 90;
         this.followDistanceMax = 40;
         this.followDistanceMin = 20;
         this.followDistance = Math.random()*this.followDistanceMax;

@@ -93,6 +93,22 @@ Crafty.scene('Game', function(){
     Crafty.e("TopBuildings");
     repeater = Crafty.e("TopBuildings");
     repeater.x = repeater.w;
+
+    bottomBound = Crafty.e("SolidBottomPlayerOnly");
+    bottomBound.w = 360;
+    bottomBound.h = 5;
+    bottomBound.x = -5;
+    bottomBound.y = 300;
+    bottomBound.color('red');
+
+    leftBound = Crafty.e("SolidLeftPlayerOnly");
+    leftBound.w = 5;
+    leftBound.h = 310;
+    leftBound.x = -5;
+    leftBound.y = -5;
+    leftBound.color('red');
+
+    
     Crafty.e("CursorAimer");
     Crafty.e("DamageOverlay");
     Crafty.e("MoveBox");

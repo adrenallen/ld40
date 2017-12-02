@@ -31,6 +31,18 @@ Crafty.c('TopBuildings', {
     }
 });
 
+Crafty.c('SolidLeftPlayerOnly', {
+    required: "2D, Canvas, Collision, Color",
+    init: function(){
+    }
+});
+
+Crafty.c('SolidBottomPlayerOnly', {
+    required: "2D, Canvas, Collision, Color",
+    init: function(){
+    }
+});
+
 Crafty.c('MoveBox', {
     required: "2D, Canvas, Collision, Color",
     init: function(){
