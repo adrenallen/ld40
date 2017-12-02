@@ -75,19 +75,16 @@ Crafty.scene('Game', function(){
     this.player.x=25;
     this.player.y=150;
 
-    for(var i = 0; i < 10; i++){
-        test = Crafty.e("AllyCharacter").attr({x: -1*(i*20), y: 100+(i*5)});
-        test.trigger('MoveTowardsPlayer');
-    }
+    //spawns allies
+    // for(var i = 0; i < 10; i++){
+    //     test = Crafty.e("AllyCharacter").attr({x: -1*(i*20), y: 100+(i*5)});
+    //     test.trigger('MoveTowardsPlayer');
+    // }
     
 
     setInterval(function(){
-        Crafty.e("MonsterCharacter1");
-        Crafty.e("MonsterCharacter1");
-        Crafty.e("MonsterCharacter1");
-        Crafty.e("MonsterCharacter1");
-        Crafty.e("MonsterCharacter1");
-        Crafty.e("MonsterCharacter1");
+        Game.addMonster();
+        
     }, 1500);
     // this.player = Crafty.e("MonsterCharacter1");
 

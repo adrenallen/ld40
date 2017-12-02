@@ -98,7 +98,7 @@ Crafty.c('PlayerCharacter', {
         this.health-=dmg;
         
         if (this.health < 1){
-            this.death();
+            // this.death();
         }
     },
     death: function(){
@@ -142,10 +142,17 @@ Crafty.c('AllyCharacter', {
     required: "2D, Canvas, Collision, SpriteAnimation, Motion, spr_ally1, Team1",
     init: function(){
         this.speed = 75;
-        this.followDistance = 40;
+        this.followDistanceMax = 40;
+        this.followDistanceMin = 20;
+        this.followDistance = Math.random()*this.followDistanceMax;
+
+        if(this.followDistance < this.followDistanceMin){
+            this.followDistance+= this.followDistanceMin;
+        }
         this.findPlayerInterval = false;
         this.health = 10;
-        this.arms = 
+        this.waitChance = Math.random();
+
         this.bind('MoveTowardsPlayer', this.moveTowardsPlayer);
 
         this.arms = Crafty.e('AllyCharacterArms');
@@ -153,6 +160,18 @@ Crafty.c('AllyCharacter', {
         this.attach(this.arms);
 
         this.onHit('Solid', function(e){
+            hitData = e[0];
+            if (hitData.type === 'SAT') { // SAT, advanced collision resolution
+                // move player back by amount of overlap
+                this.x -= hitData.overlap * hitData.normal.x;
+                this.y -= hitData.overlap * hitData.normal.y;
+              } else { // MBR, simple collision resolution
+                // move player to position before he moved (on respective axis)
+                this[evt.axis] = evt.oldValue;
+              }
+        });
+
+        this.onHit('Team1', function(e){
             hitData = e[0];
             if (hitData.type === 'SAT') { // SAT, advanced collision resolution
                 // move player back by amount of overlap
@@ -180,8 +199,14 @@ Crafty.c('AllyCharacter', {
         try{
             
             if(distanceToPlayer(this.x, this.y) < this.followDistance && typeof this.delta !== 'undefined'){
-                this.velocity().x = this.delta.vx*this.speed/2;
-                this.velocity().y = this.delta.vy*this.speed/2;
+                if(Math.random() > this.waitChance || this.waiting){
+                    this.velocity().x = 0;
+                    this.velocity().y = 0;
+                    this.waiting = true;
+                }else{
+                    this.velocity().x = this.delta.vx*this.speed/2;
+                    this.velocity().y = this.delta.vy*this.speed/2;
+                }
             }else{
                 this.delta = findPlayerDelta(this.x, this.y);
                 this.velocity().x = this.delta.vx*this.speed;
@@ -232,7 +257,7 @@ Crafty.c('MonsterCharacter1', {
     required: "2D, Canvas, MonsterActor, spr_monster1, Motion, SpriteAnimation",
     init: function(){
         this.x = Crafty.viewport.width+25
-        this.y = Crafty.viewport.height*Math.random();
+        this.y = (Crafty.viewport.height+75)*Math.random();
         this.origin("center");
         this.damage = 15;
 
@@ -245,7 +270,7 @@ Crafty.c('MonsterCharacter1', {
         ]);
 
         this.speed = 25;
-
+        
 
         this.findPlayerInterval = setInterval(function(mon){ mon.moveTowardsPlayer(); }, 100, this);
 
@@ -254,20 +279,39 @@ Crafty.c('MonsterCharacter1', {
             [0,0], [1,0], [2,0], [3,0]
         ]);
 
+        this.reel("attack", 1000, [
+            [0,2], [1,2], [2,2], [3,2]
+        ]);
+
         this.animate("idle", -1);
 
-
+        this.onHit('Team1', function(e){
+            if(!this.isPlaying("attack")){
+                this.animate("attack", 1);
+            }
+            
+        });
         
-
-        //TODO better collision
-        // this.collision([-4, 8, -4, 4, 4, 4, 4, 8]);
     },
     moveTowardsPlayer: function(){
         team1Target = findClosestTeam1(this.x, this.y);
+        if(this.isPlaying("attack") && !this.hit('Team1') && this.reelPosition() >= 3){
+            this.animate('idle', -1);
+        }else if (this.isPlaying("attack")){
+            this.velocity().x = 0;
+            this.velocity().y = 0;
+            return;
+        }
         try{
             delta = findEntityDelta(this.x, this.y, team1Target);
             this.velocity().x = delta.vx*this.speed;
             this.velocity().y = delta.vy*this.speed;
+
+            if(delta.vx > 0){
+                this.flip();
+            }else{
+                this.unflip();
+            }
         }catch(e){
             clearInterval(this.findPlayerInterval);
         }
