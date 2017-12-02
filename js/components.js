@@ -228,7 +228,7 @@ Crafty.c('AllyCharacterArms', {
 Crafty.c('AllyCharacter', {
     required: "2D, Canvas, Collision, SpriteAnimation, Motion, spr_ally1, Team1, Scrolls",
     init: function(){
-        this.speed = 90;
+        this.speed = 75;
         this.followDistanceMax = 40;
         this.followDistanceMin = 20;
         this.followDistance = Math.random()*this.followDistanceMax;
@@ -289,7 +289,7 @@ Crafty.c('AllyCharacter', {
                 ally.arms.pointToTarget(t2Target);
                 ally.fireBullet(t2Target.x, t2Target.y);
             }
-        },500, this);
+        },800, this);
     },
     moveTowardsPlayer: function(){
         if (this.findPlayerInterval === false){
@@ -319,6 +319,7 @@ Crafty.c('AllyCharacter', {
         }
     },
     convertToMonster: function(){
+        Crafty.audio.play('convert');
         monster = Crafty.e('MonsterCharacter1');
         monster.x = this.x;
         monster.y = this.y;
@@ -349,6 +350,8 @@ Crafty.c('AllyCharacter', {
         // Crafty.e("2D, Canvas, Color").attr({x: e.offsetX, y: e.offsetY, w:10, h:10}).color('red');
     },
     death: function(){
+        Crafty.audio.play('allydeath');
+        clearInterval(this.conversionTimer);
         clearInterval(this.shootInterval);
         this.destroy();
         allyBody = Crafty.e("AllyBody1");
@@ -505,7 +508,7 @@ Crafty.c('MonsterActor', {
     },
     death: function(){
         this.destroy();
-
+        Crafty.audio.play('monsterdeath');
         
         monsterBody = Crafty.e("MonsterBody1");
         
@@ -535,6 +538,7 @@ Crafty.c('MonsterBodyActor', {
         //added this to avoid duplicate revives for one body
         if (!this.isReviving){
             this.isReviving = true;
+            Crafty.audio.play('revive');
             newAlly = Crafty.e('AllyCharacter');
             newAlly.x = this.x;
             newAlly.y = this.y;
@@ -564,7 +568,7 @@ Crafty.c('Projectile', {
 Crafty.c('PlayerBullet', {
     required: "2D, Canvas, Motion, spr_bullet, Collision",
     init: function(){
-        
+        Crafty.audio.play('defaultgun');
         this.origin('center');
         this.bulletSpeed = 500;
         this.damage = 5;
@@ -602,24 +606,7 @@ Crafty.c('CursorAimer', {
     }
 });
 
-Crafty.c('DamageOverlay', {
-    required: "2D, Canvas, Color, Tween",
-    init: function(){
-        this.x = 0;
-        this.y = 0;
-        this.w = Crafty.viewport.width;
-        this.h = Crafty.viewport.height;
-        this.alpha = 0;
-        this.z = 1000;
-        this.color('red');
-    },
-    showDamage: function(){
-        this.tween({alpha: 0.3}, 100);
-        setTimeout(function(e){
-            Crafty('DamageOverlay').get(0).tween({ alpha:0 }, 200);
-        }, 500);
-    }
-});
+
 
 function calculateVXYRotation(destX, destY, originX, originY){
          // //set rotation

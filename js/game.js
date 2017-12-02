@@ -1,5 +1,5 @@
 const gameWidth = 350;
-const gameHeight = 300;
+const gameHeight = 250;
 const topWalkBound = 0.45*gameHeight;
 const maxMonsters = 3;
 

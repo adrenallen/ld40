@@ -26,3 +26,23 @@ Crafty.c('PlayerHealthBar', {
         this.fg.w = health/(this.maxHealth || 200)*100;
     }
 });
+
+Crafty.c('DamageOverlay', {
+    required: "2D, Canvas, Color, Tween",
+    init: function(){
+        this.x = 0;
+        this.y = 0;
+        this.w = Crafty.viewport.width;
+        this.h = Crafty.viewport.height;
+        this.alpha = 0;
+        this.z = 1000;
+        this.color('red');
+    },
+    showDamage: function(){
+        Crafty.audio.play("playerhurt");
+        this.tween({alpha: 0.3}, 100);
+        setTimeout(function(e){
+            Crafty('DamageOverlay').get(0).tween({ alpha:0 }, 200);
+        }, 500);
+    }
+});

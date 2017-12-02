@@ -64,11 +64,21 @@ var assetsObj = {
             paddingY: 1,
             paddingAroundBorder: 0
         },
+    },
+    "audio":{
+        "playerhurt": ['hurt.wav'],
+        "losegame": ['lose.wav'],
+        "defaultgun": ['defaultgun.wav'],
+        "monsterdeath": ['monsterdeath.wav'],
+        "revive": ["revive.wav"],
+        "allydeath": ["allydeath.wav"],
+        "convert": ["convert.wav"]
     }
 };
 
 Crafty.paths({
-    images: "assets/"
+    images: "assets/",
+    audio: "assets/audio/"
 });
 
 Crafty.scene('Loading', function(){
@@ -82,6 +92,7 @@ Crafty.scene('Loading', function(){
 
 Crafty.scene('GameOver', function(){
     Crafty.e("2D, Canvas, Text").attr({ x: 100, y: 100 }).text("You died!");
+    Crafty.audio.play('losegame');
 });
 
 Crafty.scene('Game', function(){
@@ -98,7 +109,7 @@ Crafty.scene('Game', function(){
     bottomBound.w = 360;
     bottomBound.h = 5;
     bottomBound.x = -5;
-    bottomBound.y = 300;
+    bottomBound.y = 250;
     bottomBound.color('red');
 
     leftBound = Crafty.e("SolidLeftPlayerOnly");
@@ -138,10 +149,7 @@ Crafty.scene('Game', function(){
     this.clickTracker = Crafty.e("2D");
 
     Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousedown", function(e){
-        clearInterval(Game.shootInterval);
-        Game.shootInterval = setInterval(function(eData){
-            Crafty('PlayerCharacter').get(0).fireBullet(eData);
-        }(e), 200);
+        Crafty('PlayerCharacter').get(0).fireBullet(e);
         
     });
 
@@ -150,10 +158,14 @@ Crafty.scene('Game', function(){
     });
 
     Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousemove", function(e){
-        Crafty('PlayerCharacterArms').get(0).pointToMouse(e);
-        cursor = Crafty('CursorAimer').get(0)
-        cursor.x = e.offsetX;
-        cursor.y = e.offsetY;
+        try{
+            Crafty('PlayerCharacterArms').get(0).pointToMouse(e);
+            cursor = Crafty('CursorAimer').get(0)
+            cursor.x = e.offsetX;
+            cursor.y = e.offsetY;
+        }catch(e){
+            console.log(e)
+        }
     });
 
     Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
