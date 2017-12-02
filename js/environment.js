@@ -36,7 +36,7 @@ Crafty.c('MoveBox', {
     required: "2D, Canvas, Collision, Color",
     init: function(){
         this.color('blue');
-        this.alpha = 0.05;
+        this.alpha = 0;
         this.x = 300;
         this.y = 0;
         this.w = 50;

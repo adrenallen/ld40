@@ -434,8 +434,13 @@ Crafty.c('MonsterActor', {
     },
     death: function(){
         this.destroy();
+
+        
         monsterBody = Crafty.e("MonsterBody1");
         
+        if(this['_flipX']){
+            monsterBody.flip();
+        }
         monsterBody.x = this.x;
         monsterBody.y = this.y;
         // Crafty.e("MonsterCharacter1");
