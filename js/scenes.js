@@ -43,7 +43,17 @@ var assetsObj = {
             paddingX: 0,
             paddingY: 1,
             paddingAroundBorder: 0
-        }
+        },
+        "sprites/cursor.png" :{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_cursor: [0,0],
+            },
+            paddingX: 0,
+            paddingY: 1,
+            paddingAroundBorder: 0
+        },
     }
 };
 
@@ -71,6 +81,9 @@ Crafty.scene('Game', function(){
     this.player = Crafty.e("PlayerCharacter");
 
     Crafty.e("TopBuildings");
+    Crafty.e("CursorAimer");
+    Crafty.e("DamageOverlay");
+    
 
     this.player.x=25;
     this.player.y=150;
@@ -81,11 +94,11 @@ Crafty.scene('Game', function(){
     //     test.trigger('MoveTowardsPlayer');
     // }
     
-
-    setInterval(function(){
-        Game.addMonster();
+    Game.addMonster(100, 150);
+    // setInterval(function(){
+    //     Game.addMonster();
         
-    }, 1500);
+    // }, 500);
     // this.player = Crafty.e("MonsterCharacter1");
 
     Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
@@ -100,13 +113,26 @@ Crafty.scene('Game', function(){
         }
     });
     
+    
     this.clickTracker = Crafty.e("2D");
+
     Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousedown", function(e){
-        Crafty('PlayerCharacter').get(0).fireBullet(e);
+        clearInterval(Game.shootInterval);
+        Game.shootInterval = setInterval(function(eData){
+            Crafty('PlayerCharacter').get(0).fireBullet(eData);
+        }(e), 200);
+        
+    });
+
+    Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mouseup", function(e){
+        clearInterval(Game.shootInterval);
     });
 
     Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousemove", function(e){
         Crafty('PlayerCharacterArms').get(0).pointToMouse(e);
+        cursor = Crafty('CursorAimer').get(0)
+        cursor.x = e.offsetX;
+        cursor.y = e.offsetY;
     });
     
 

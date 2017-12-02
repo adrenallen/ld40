@@ -5,6 +5,7 @@ Crafty.c('PlayerCharacterArms', {
     init: function(){
         this.origin('center');
         this.flipped = false;
+        this.z=999;
     },
     pointToMouse: function(e){
         calcs = calculateVXYRotation(e.offsetX, e.offsetY, this.x, this.y);
@@ -29,8 +30,8 @@ Crafty.c('PlayerCharacter', {
     required: "2D, Canvas, Collision, Fourway, Motion, spr_player, Team1",
     init: function(){
         this.origin("center");
-        this.health = 50;
-        
+        this.health = 200;
+        this.z=998;
         this.collision([3,0,
                         12, 0,
                         12, 16,
@@ -47,7 +48,9 @@ Crafty.c('PlayerCharacter', {
         
         this.fourway(movementSpeed);
         this.onHit('Projectile', this.takeBulletDamage);
-        this.onHit('MonsterActor', this.takeMonsterDamage);
+
+        //this is now done via the monster classes
+        // this.onHit('MonsterActor', this.takeMonsterDamage);
 
         this.onHit('Solid', function(e){
             hitData = e[0];
@@ -96,9 +99,11 @@ Crafty.c('PlayerCharacter', {
     },
     takeDamage: function(dmg){
         this.health-=dmg;
+
+        Crafty('DamageOverlay').get(0).showDamage();
         
         if (this.health < 1){
-            // this.death();
+            this.death();
         }
     },
     death: function(){
@@ -118,6 +123,7 @@ Crafty.c('AllyCharacterArms', {
     init: function(){
         this.origin('center');
         this.flipped = false;
+        this.z = 801;
     },
     pointToTarget: function(e){
         calcs = calculateVXYRotation(e.x, e.y, this.x, this.y);
@@ -145,12 +151,18 @@ Crafty.c('AllyCharacter', {
         this.followDistanceMax = 40;
         this.followDistanceMin = 20;
         this.followDistance = Math.random()*this.followDistanceMax;
+        this.z = 800;
+        this.collision([3,0,
+            12, 0,
+            12, 16,
+            3, 16,
+            3, 8]);
 
         if(this.followDistance < this.followDistanceMin){
             this.followDistance+= this.followDistanceMin;
         }
         this.findPlayerInterval = false;
-        this.health = 10;
+        this.health = 50;
         this.waitChance = Math.random();
 
         this.bind('MoveTowardsPlayer', this.moveTowardsPlayer);
@@ -183,12 +195,17 @@ Crafty.c('AllyCharacter', {
               }
         });
 
-        this.onHit('MonsterActor', this.takeMonsterDamage);
+        // this.onHit('MonsterActor', this.takeMonsterDamage);
 
-        setInterval(function(ally){
+        this.shootInterval = setInterval(function(ally){
+            if(ally.health <= 0){
+                clearInterval(this.shootInterval);
+            }
             t2Target = findClosestTeam2(ally.x, ally.y);
-            ally.arms.pointToTarget(t2Target);
-            ally.fireBullet(t2Target.x, t2Target.y);
+            if(t2Target){
+                ally.arms.pointToTarget(t2Target);
+                ally.fireBullet(t2Target.x, t2Target.y);
+            }
         },500, this);
     },
     moveTowardsPlayer: function(){
@@ -241,6 +258,7 @@ Crafty.c('AllyCharacter', {
         // Crafty.e("2D, Canvas, Color").attr({x: e.offsetX, y: e.offsetY, w:10, h:10}).color('red');
     },
     death: function(){
+        clearInterval(this.shootInterval);
         this.destroy();
         allyBody = Crafty.e("AllyBody1");
         
@@ -256,10 +274,13 @@ Crafty.c('AllyCharacter', {
 Crafty.c('MonsterCharacter1', {
     required: "2D, Canvas, MonsterActor, spr_monster1, Motion, SpriteAnimation",
     init: function(){
-        this.x = Crafty.viewport.width+25
-        this.y = (Crafty.viewport.height+75)*Math.random();
+        this.x = ((Crafty.viewport.width+50)*Math.random())-(Math.random()*50)
+        this.y = (Crafty.viewport.height*Math.random())+75;
+        //TODO make monsters spawn outside of the range
         this.origin("center");
-        this.damage = 15;
+        this.damage = 25;
+        this.z = 750;
+
 
         this.collision([
             3,0,
@@ -286,10 +307,14 @@ Crafty.c('MonsterCharacter1', {
         this.animate("idle", -1);
 
         this.onHit('Team1', function(e){
+            console.log(this);
             if(!this.isPlaying("attack")){
                 this.animate("attack", 1);
             }
-            
+            if(this.reelPosition() == 1 && !this.attackCooling){
+                e[0].obj.takeDamage(this.damage);
+                this.reelPosition(2);
+            }      
         });
         
     },
@@ -333,7 +358,7 @@ Crafty.c('AllyBody1', {
 
 Crafty.c('Body', {
     init: function(){
-        this.z = 0;
+        this.z = 1;
     }
 })
 
@@ -362,7 +387,7 @@ Crafty.c('MonsterBody1', {
 Crafty.c('MonsterActor', {
     required: "2D, Canvas, Collision, Team2",
     init: function(){
-        this.health = 15;   
+        this.health = 20;   
 
         this.onHit('Projectile', this.takeBulletDamage);
         this.onHit('PlayerBullet', this.takeBulletDamage);
@@ -433,12 +458,18 @@ Crafty.c('Projectile', {
 });
 
 Crafty.c('PlayerBullet', {
-    required: "2D, Canvas, Motion, spr_bullet",
+    required: "2D, Canvas, Motion, spr_bullet, Collision",
     init: function(){
         
         this.origin('center');
         this.bulletSpeed = 500;
         this.damage = 5;
+        this.collision([
+            6,5,
+            10,5,
+            10,9,
+            6,9
+        ]);
     },
 
     clickDirection: function(x,y){
@@ -455,6 +486,34 @@ Crafty.c('PlayerBullet', {
 
 
         
+    }
+});
+
+
+Crafty.c('CursorAimer', {
+    required: "2D, Canvas, spr_cursor",
+    init: function(){
+        this.origin('center');
+        this.alpha = 0.4;
+    }
+});
+
+Crafty.c('DamageOverlay', {
+    required: "2D, Canvas, Color, Tween",
+    init: function(){
+        this.x = 0;
+        this.y = 0;
+        this.w = Crafty.viewport.width;
+        this.h = Crafty.viewport.height;
+        this.alpha = 0;
+        this.z = 1000;
+        this.color('red');
+    },
+    showDamage: function(){
+        this.tween({alpha: 0.3}, 100);
+        setTimeout(function(e){
+            Crafty('DamageOverlay').get(0).tween({ alpha:0 }, 200);
+        }, 500);
     }
 });
 
@@ -524,10 +583,13 @@ function findClosestTeam1(x,y){
 function findClosestTeam2(x,y){
     team2 = Crafty('Team2').get();
 
-    var target = team2[0];
+    var target = null;
     var closestDistance = -1;
 
     for(var i = 0; i < team2.length; i++){
+        if(!entityInViewport(team2[i])){
+            continue;
+        }
         dist = distanceToEntity(x,y,team2[i]);
         if(closestDistance < 0 || closestDistance > dist){
             target = team2[i];
@@ -536,4 +598,11 @@ function findClosestTeam2(x,y){
     }
 
     return target;
+}
+
+function entityInViewport(ent){
+    if(ent.x > Crafty.viewport.width || ent.x < 0 || ent.y > Crafty.viewport.height || ent.y < 0){
+        return false;
+    }
+    return true;
 }
