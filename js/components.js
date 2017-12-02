@@ -1,4 +1,5 @@
 const movementSpeed = 100;
+const reviveConversionTime = 15000;
 
 Crafty.c('PlayerCharacterArms', {
     required: "2D, Canvas, Motion, spr_player_arms, Mouse",
@@ -60,8 +61,17 @@ Crafty.c('PlayerCharacter', {
                 this.y -= hitData.overlap * hitData.normal.y;
               } else { // MBR, simple collision resolution
                 // move player to position before he moved (on respective axis)
-                this[evt.axis] = evt.oldValue;
+                // this[evt.axis] = evt.oldValue;
               }
+        });
+
+        this.onHit('MoveBox', function(e){
+            hitData = e[0];
+            if (hitData.type === 'SAT') { // SAT, advanced collision resolution
+                // move player back by amount of overlap
+                this.x -= hitData.overlap * hitData.normal.x;
+                Game.moveMap(hitData.overlap * hitData.normal.x);
+              } 
         });
     },
 
@@ -112,9 +122,9 @@ Crafty.c('PlayerCharacter', {
 });
 
 Crafty.c('Team1', {
-    
 });
 Crafty.c('Team2', {
+    required: "Scrolls"
     
 });
 
@@ -145,7 +155,7 @@ Crafty.c('AllyCharacterArms', {
 });
 
 Crafty.c('AllyCharacter', {
-    required: "2D, Canvas, Collision, SpriteAnimation, Motion, spr_ally1, Team1",
+    required: "2D, Canvas, Collision, SpriteAnimation, Motion, spr_ally1, Team1, Scrolls",
     init: function(){
         this.speed = 75;
         this.followDistanceMax = 40;
@@ -166,7 +176,9 @@ Crafty.c('AllyCharacter', {
         this.waitChance = Math.random();
 
         this.bind('MoveTowardsPlayer', this.moveTowardsPlayer);
+        this.bind('ConvertToMonster', this.convertToMonster);
 
+        
         this.arms = Crafty.e('AllyCharacterArms');
         this.arms.visible = false;
         this.attach(this.arms);
@@ -234,6 +246,14 @@ Crafty.c('AllyCharacter', {
             console.log('got error', e, 'clearing movement interval');
             clearInterval(this.findPlayerInterval);
         }
+    },
+    convertToMonster: function(){
+        monster = Crafty.e('MonsterCharacter1');
+        monster.x = this.x;
+        monster.y = this.y;
+        monster.health += this.health;
+        clearInterval(this.shootInterval);
+        this.destroy();
     },
     takeMonsterDamage: function(hitData){
         this.takeDamage(hitData[0].obj.attr('damage'));
@@ -307,7 +327,6 @@ Crafty.c('MonsterCharacter1', {
         this.animate("idle", -1);
 
         this.onHit('Team1', function(e){
-            console.log(this);
             if(!this.isPlaying("attack")){
                 this.animate("attack", 1);
             }
@@ -357,10 +376,11 @@ Crafty.c('AllyBody1', {
 });
 
 Crafty.c('Body', {
+    required: "Scrolls",
     init: function(){
         this.z = 1;
     }
-})
+});
 
 //dead bodies of monsters
 Crafty.c('AllyBodyActor', {
@@ -418,7 +438,7 @@ Crafty.c('MonsterActor', {
         
         monsterBody.x = this.x;
         monsterBody.y = this.y;
-        Crafty.e("MonsterCharacter1");
+        // Crafty.e("MonsterCharacter1");
     }
 });
 
@@ -445,6 +465,9 @@ Crafty.c('MonsterBodyActor', {
             newAlly.bind('AnimationEnd', function(e){
                 e.trigger('MoveTowardsPlayer');
             }(newAlly));
+
+            newAlly.conversionTimer = setTimeout(function(e){
+                return function(){ e.convertToMonster(); }; }(newAlly), reviveConversionTime);
         }
     },
     

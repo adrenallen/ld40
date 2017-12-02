@@ -54,6 +54,16 @@ var assetsObj = {
             paddingY: 1,
             paddingAroundBorder: 0
         },
+        "sprites/buildings.png":{
+            tile: 600,
+            tileh: 75,
+            map: {
+                spr_building: [0,0],
+            },
+            paddingX: 0,
+            paddingY: 1,
+            paddingAroundBorder: 0
+        },
     }
 };
 
@@ -81,8 +91,11 @@ Crafty.scene('Game', function(){
     this.player = Crafty.e("PlayerCharacter");
 
     Crafty.e("TopBuildings");
+    repeater = Crafty.e("TopBuildings");
+    repeater.x = repeater.w;
     Crafty.e("CursorAimer");
     Crafty.e("DamageOverlay");
+    Crafty.e("MoveBox");
     
 
     this.player.x=25;
@@ -95,11 +108,13 @@ Crafty.scene('Game', function(){
     // }
     
     Game.addMonster(100, 150);
-    // setInterval(function(){
-    //     Game.addMonster();
+
+
+    setInterval(function(){
+        Game.addMonster();
         
-    // }, 500);
-    // this.player = Crafty.e("MonsterCharacter1");
+    }, 2000);
+    
 
     Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
         if (e.key == Crafty.keys.E){
