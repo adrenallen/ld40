@@ -19,6 +19,16 @@ var assetsObj = {
             paddingX: 0,
             paddingY: 0,
             paddingAroundBorder: 0
+        },
+        "sprites/monster1.png" :{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_monster1: [0,0]
+            },
+            paddingX: 0,
+            paddingY: 0,
+            paddingAroundBorder: 0
         }
     }
 };
@@ -42,11 +52,16 @@ Crafty.scene('Loading', function(){
     });
 });
 
+Crafty.scene('GameOver', function(){
+    Crafty.e("2D, DOM, Text").attr({ x: 100, y: 100 }).text("You died!");
+});
+
 Crafty.scene('Game', function(){
     
 
     //add player to the game!
     this.player = Crafty.e("PlayerCharacter");
+    this.player = Crafty.e("MonsterCharacter1");
 
 
     
