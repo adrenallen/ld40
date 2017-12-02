@@ -16,7 +16,6 @@ Crafty.c('TopBuildings', {
         }(this));
     },
     checkForRepeat: function(){
-        console.log('here', this.x);
         if(this.x <= -1*this.w){
             
             buildings = Crafty('TopBuildings').get();
@@ -43,3 +42,4 @@ Crafty.c('MoveBox', {
         this.h = 300;
     }
 });
+

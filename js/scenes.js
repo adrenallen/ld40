@@ -5,7 +5,7 @@ var assetsObj = {
             tileh: 16,
             map: {
                 spr_player: [0,0],
-                spr_player_arms: [0,1]
+                spr_player_arms: [1,0]
             },
             paddingX: 0,
             paddingY: 1,
@@ -116,17 +116,7 @@ Crafty.scene('Game', function(){
     }, 2000);
     
 
-    Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
-        if (e.key == Crafty.keys.E){
-            Crafty('PlayerCharacter').get(0).attemptReviveBody();    
-        }
-    });
 
-    Crafty.e("2D, Keyboard").bind('KeyUp', function(e){
-        if (e.key == Crafty.keys.E){
-            Crafty('PlayerCharacter').get(0).stopAttemptReviveBody();    
-        }
-    });
     
     
     this.clickTracker = Crafty.e("2D");
@@ -148,6 +138,18 @@ Crafty.scene('Game', function(){
         cursor = Crafty('CursorAimer').get(0)
         cursor.x = e.offsetX;
         cursor.y = e.offsetY;
+    });
+
+    Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
+        if (e.key == Crafty.keys.E){
+            Crafty('PlayerCharacter').get(0).attemptReviveBody();    
+        }
+    });
+
+    Crafty.e("2D, Keyboard").bind('KeyUp', function(e){
+        if (e.key == Crafty.keys.E){
+            Crafty('PlayerCharacter').get(0).stopAttemptReviveBody();    
+        }
     });
     
 

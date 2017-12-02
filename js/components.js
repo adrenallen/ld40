@@ -28,7 +28,7 @@ Crafty.c('PlayerCharacterArms', {
 });
 
 Crafty.c('PlayerCharacter', {
-    required: "2D, Canvas, Collision, Fourway, Motion, spr_player, Team1",
+    required: "2D, Canvas, Collision, Fourway, Motion, spr_player, Team1, SpriteAnimation",
     init: function(){
         this.origin("center");
         this.health = 200;
@@ -44,6 +44,13 @@ Crafty.c('PlayerCharacter', {
 
         this.arms = Crafty.e('PlayerCharacterArms');
         this.attach(this.arms);
+
+        this.reel('idle', 1000, [[0,0]]);
+        this.animate('idle', -1);
+
+        this.reel("revive", 1500, [
+            [0,1], [1,1], [2,1], [3,1]
+        ]);
 
         //TODO - some kind of timeout so you can only be hurt so many times a second
         
@@ -76,6 +83,11 @@ Crafty.c('PlayerCharacter', {
     },
 
     fireBullet: function(e){
+
+        if(this.isPlaying('revive')){
+            return; //cant fire while reviving
+        }
+
         var newBullet = Crafty.e("PlayerBullet");
 
         //TODO - make it appear ahead of the way we are looking slightly
@@ -90,9 +102,32 @@ Crafty.c('PlayerCharacter', {
 
     //attempt to revive a body you are touching
     attemptReviveBody: function(){
+        if(this.isPlaying('revive')){
+            return; //can't revive we are already doing it
+        }
         this.checkHits('MonsterBodyActor').bind('HitOn', function(hitData){
+            player = Crafty('PlayerCharacter').get(0);
+            
+            player.arms.visible = false;
+            
+            player.resetMotion();
+            player.fourway(0.0000001);
+            player.animate("revive", 1);
+            
+
+            setTimeout(function(e){
+                return function(){
+                    e.revive();
+                    player = Crafty('PlayerCharacter').get(0);
+                    player.arms.visible=true;
+                    player.animate('idle', -1);
+                    player.fourway(movementSpeed);
+                };
+            }(hitData[0].obj), 1500);
+
+
             //hitData[0].obj is the obj
-            hitData[0].obj.revive();
+            
         });
     },
 
