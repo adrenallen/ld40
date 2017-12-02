@@ -4,7 +4,8 @@ var assetsObj = {
             tile: 16,
             tileh: 16,
             map: {
-                spr_player: [0,0]
+                spr_player: [0,0],
+                spr_player_arms: [0,1]
             },
             paddingX: 0,
             paddingY: 1,
@@ -14,7 +15,9 @@ var assetsObj = {
             tile: 16,
             tileh: 16,
             map: {
-                spr_ally1: [0,0]
+                spr_ally1: [0,0],
+                spr_ally1_body: [3,3],
+                spr_ally1_arms: [0,1]
             },
             paddingX: 0,
             paddingY: 1,
@@ -72,7 +75,21 @@ Crafty.scene('Game', function(){
     this.player.x=25;
     this.player.y=150;
 
-    this.player = Crafty.e("MonsterCharacter1");
+    for(var i = 0; i < 10; i++){
+        test = Crafty.e("AllyCharacter").attr({x: -1*(i*20), y: 100+(i*5)});
+        test.trigger('MoveTowardsPlayer');
+    }
+    
+
+    setInterval(function(){
+        Crafty.e("MonsterCharacter1");
+        Crafty.e("MonsterCharacter1");
+        Crafty.e("MonsterCharacter1");
+        Crafty.e("MonsterCharacter1");
+        Crafty.e("MonsterCharacter1");
+        Crafty.e("MonsterCharacter1");
+    }, 1500);
+    // this.player = Crafty.e("MonsterCharacter1");
 
     Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
         if (e.key == Crafty.keys.E){
@@ -89,6 +106,10 @@ Crafty.scene('Game', function(){
     this.clickTracker = Crafty.e("2D");
     Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousedown", function(e){
         Crafty('PlayerCharacter').get(0).fireBullet(e);
+    });
+
+    Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousemove", function(e){
+        Crafty('PlayerCharacterArms').get(0).pointToMouse(e);
     });
     
 
