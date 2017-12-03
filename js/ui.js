@@ -59,6 +59,34 @@ Crafty.c('DamageOverlay', {
     }
 });
 
+Crafty.c("GameIntroModal", {
+    required: "2D, Canvas, Color, Tween, Mouse",
+    init: function(){
+        padding = 25;
+        this.attr({
+            x: padding,
+            y: padding,
+            h: gameHeight-(padding*2),
+            w: gameWidth-(padding*2),
+            z: 1500,
+            alpha: 1
+        });
+        this.color('lightgray');
+
+        
+        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: gameHeight/5, z:1501}).text('Welcome to [game name here]!');
+        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2), z:1501}).text('CONTROLS:');
+        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*3), z:1501}).text('WASD or arrow keys to move');
+        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*4), z:1501}).text('Mouse to aim, left click to fire');
+        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*5), z:1501}).text('E to give antidote to a downed mutant');
+        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*6), z:1501}).text('C to destroy a body');
+        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*7), z:1501}).text('Enter to start the game');
+        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*9), z:1501}).text('Please see the github readme for more details!');
+    
+        Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
+    }
+});
+
 Crafty.c("GameOverModal", {
     required: "2D, Canvas, Color, Tween, Mouse",
     init: function(){
@@ -81,13 +109,6 @@ Crafty.c("GameOverModal", {
         
         Crafty.e("2D, Keyboard").unbind('KeyDown', KeyboardCB.keydown);
         Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
-    }
-});
-
-Crafty.c("MenuButton", {
-    required: "2D, Canvas, Color, Mouse",
-    init: function(){
-
     }
 });
 

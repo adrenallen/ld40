@@ -1,13 +1,13 @@
 const gameWidth = 350;
 const gameHeight = 250;
 const topWalkBound = 75;
-const maxMonsters = 3;
+const maxMonsters = 150;
 
 Game = {
     levelProgress: 0,
     monsterKillPoints: 0,
     allyPoints: 0,
-    difficultyMultiplier: 1,
+    shooting: false,
     start: function(){
         Crafty.init(gameWidth,gameHeight);
         Crafty.background('gray');
@@ -50,7 +50,7 @@ Game = {
         this.levelProgress += v;
         this.scoreDisplay.updateScore(this.scoreCalculator());
         // console.log(this.levelProgress);
-        GameDirector.checkForEvent(this.levelProgress);
+        GameDirector.checkForEvent(this.scoreCalculator);
     },
     difficultyCalculator: function(){
     },
@@ -72,14 +72,25 @@ Game = {
     
 };
 
+
+GameDirector = {
+    eventHistory: [],
+    eventDistanceMax: 300,
+    checkForEvent: function(progress){
+        // this.nextEvent = Math.random()*this.eventMultiplier
+    }
+};
+
 KeyboardCB = {
     mousedown: function(e){
         try{
-            console.log('here');
             Crafty('PlayerCharacter').get(0).fireBullet({offsetX: cursor.x, offsetY: cursor.y});
-            Game.shootInterval = setInterval(function(){
-                Crafty('PlayerCharacter').get(0).fireBullet({offsetX: cursor.x, offsetY: cursor.y});
-            }, 100, e);
+            if(!Game.shooting){
+                Game.shooting = true;
+                Game.shootInterval = setInterval(function(){
+                    Crafty('PlayerCharacter').get(0).fireBullet({offsetX: cursor.x, offsetY: cursor.y});
+                }, 100, e);
+            }
         }catch(e){
             console.log(e); //im ashamed of this
         }
@@ -87,6 +98,7 @@ KeyboardCB = {
         
     },
     mouseup: function(e){
+        Game.shooting = false;
         clearInterval(Game.shootInterval);
     },
     mousemove: function(e){
@@ -128,27 +140,3 @@ KeyboardCB = {
 };
 
 
-
-GameDirector = {
-    eventHistory: [],
-    checkForEvent: function(progress){
-        if(progress > 100 && !this.eventHistory[100]){
-            this.eventHistory[100] = true;
-            Game.addMonster();
-            Game.addMonster();
-            Game.addMonster();
-            Game.addMonster();
-            Game.addMonster();
-        }
-        if(progress > 500){
-
-        }
-        if(progress > 1000){
-            Game.addBagger(gameWidth+100, Math.random()*gameHeight+topWalkBound);
-            Game.addBagger(gameWidth+100, Math.random()*gameHeight+topWalkBound);
-            Game.addMonster(gameWidth+75, Math.random()*gameHeight+topWalkBound);
-            Game.addMonster(gameWidth+50, Math.random()*gameHeight+topWalkBound);
-            Game.addMonster(gameWidth+60, Math.random()*gameHeight+topWalkBound);
-        }
-    }
-};

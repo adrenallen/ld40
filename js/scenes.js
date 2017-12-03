@@ -127,9 +127,15 @@ Crafty.scene('Loading', function(){
     
     //load player sprite sheet
     Crafty.load(assetsObj, function(){
-
-        Crafty.scene('Game');
+        Crafty.scene('Intro');
+        
     });
+});
+
+//intro should show controls
+Crafty.scene('Intro', function(){
+    Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
+    Crafty.e('GameIntroModal');
 });
 
 Crafty.scene('GameOver', function(){
@@ -187,9 +193,9 @@ Crafty.scene('Game', function(){
     Game.addMonster(200, 170);
     Game.addMonster(175, 130);
 
-    // bag = Crafty.e('BaggerCharacter');
-    // bag.x = 200;
-    // bag.y = 150;
+    bag = Crafty.e('BaggerCharacter');
+    bag.x = 200;
+    bag.y = 150;
 
 
     // setInterval(function(){
