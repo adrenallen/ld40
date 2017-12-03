@@ -300,6 +300,7 @@ Crafty.c('AllyCharacterArms', {
         this.origin('center');
         this.flipped = false;
         this.z = 801;
+
     },
     pointToTarget: function(e){
         calcs = calculateVXYRotation(e.x, e.y, this.x, this.y);
@@ -334,6 +335,15 @@ Crafty.c('AllyCharacter', {
             3, 16,
             3, 8]);
         this.pointValue = 10;
+
+
+        this.reel("run", 500, [
+            [0,4], [1,4], [2,4], [3,4]
+        ]);
+
+        this.reel("idle", 500, [
+            [0,0]
+        ]);
 
         if(this.followDistance < this.followDistanceMin){
             this.followDistance+= this.followDistanceMin;
@@ -408,9 +418,21 @@ Crafty.c('AllyCharacter', {
                 this.velocity().x = this.delta.vx*this.speed;
                 this.velocity().y = this.delta.vy*this.speed;
             }
+
+            if(this.velocity().x > 0){
+                this.unflip();
+            }else if (this.velocity().x < 0){
+                this.flip();
+            }
+
+            if ((this.velocity().x !== 0 || this.velocity().y !== 0) && !this.isPlaying('run')){
+                this.animate('run', -1);
+            }else if (!this.isPlaying('idle')){
+                this.animate('idle', -1);
+            }
             
         }catch(e){
-            // console.log('got error', e, 'clearing movement interval');
+            console.log('got error', e, 'clearing movement interval');
             clearInterval(this.findPlayerInterval);
         }
     },
