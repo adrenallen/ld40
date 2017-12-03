@@ -125,17 +125,6 @@ Crafty.c('SnekCharacter', {
                 }else if (this.reelPosition() > 2){
                     this.firingRange = false;
                 }
-
-
-
-                console.log("shoot");
-
-                // if(this.x < Crafty.viewport.width+this.huntPeopleDistance){
-                //     this.velocity().x = this.speed;
-                //     this.flip();
-                // }else{
-                
-                // }
             }else if(!this.isPlaying("rangeattack")){
                 if(!this.isPlaying("run")){
                     this.animate("run", -1);
@@ -163,6 +152,9 @@ Crafty.c('SnekCharacter', {
         
     },
     shouldFire: function(x,y){
+        if(!entityInViewport(this)){
+            return; //don't fire from off screen
+        }
         this.firingRange = true;
         for(var i = 0; i < 2; i++){
             setTimeout(function(x,y,snek){
@@ -226,7 +218,7 @@ Crafty.c('SnekBody', {
 });
 
 Crafty.c('SnekBomb', {
-    required: "2D, Canvas, Motion, spr_snekbomb, Collision, SpriteAnimation, EnemyPro",
+    required: "2D, Canvas, Motion, spr_snekbomb, Collision, SpriteAnimation",
     init: function(){
         //TODO better sounds yo
         Crafty.audio.play('defaultgun');
@@ -250,6 +242,7 @@ Crafty.c('SnekBomb', {
         this.onHit('Team1', function(e){
             hitData = e[0].obj;
             hitData.takeDamage(this.damage);
+            Crafty.e("SnekBombPool").attr({x: this.x, y: this.y});
             this.destroy();
         });
     },
@@ -270,4 +263,41 @@ Crafty.c('SnekBomb', {
 
         
     }
+});
+
+Crafty.c('SnekBombPool', {
+    required: "2D, Canvas, Motion, spr_snekbombpool, Collision, SpriteAnimation",
+    init: function(){
+        this.origin('center');
+        this.damage = 3;
+        this.z = 5;
+        this.collision([
+            1,1,
+            15,1,
+            15,15,
+            1,15
+        ]);
+
+        this.onHit('Team1', function(e){
+            hitData = e[0].obj;
+
+            if(hitData.tookPoolDamage == true){
+                return;
+            }else{
+                hitData.takeDamage(this.damage);
+                hitData.tookPoolDamage = true;
+                setTimeout(function(obj){
+                    return function(){
+                        obj.tookPoolDamage = false;
+                    };
+                }(hitData),500);
+            }
+        });
+
+        setTimeout(function(pool){
+            return function(){
+                pool.destroy();
+            };
+        }(this),7500);
+    },
 });

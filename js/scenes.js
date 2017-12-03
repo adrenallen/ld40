@@ -89,6 +89,7 @@ var assetsObj = {
             tileh: 16,
             map: {
                 spr_snekbomb: [0,0],
+                spr_snekbombpool: [3,0],
             },
             paddingX: 0,
             paddingY: 0,
