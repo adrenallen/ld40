@@ -42,6 +42,12 @@ Game = {
             }
         }
     },
+    addCar: function(x,y){
+        car = Crafty.e('CarObject');
+        car.x = gameWidth+(Math.random()*topWalkBound);
+        car.y = (gameHeight*Math.random())+topWalkBound;
+        car.rotation = Math.floor(Math.random()*90)-45;
+    },
     moveMap: function(v){
         moveThese = Crafty("Scrolls").get();
         for (var i = 0; i < moveThese.length; i++){
@@ -92,9 +98,6 @@ GameDirector = {
             GameDirector.lastScoreEvent =  score;
 
             tier = Math.floor(score/GameDirector.tierScoreGap);
-            randEvent = Math.floor(Math.random()*GameEvents.Tiers[0].length);
-
-            console.log(tier, score, randEvent);
             
             if(typeof GameEvents.Tiers[tier] == 'undefined'){
 
@@ -104,8 +107,11 @@ GameDirector = {
                 }                
 
             }else{
+                randEvent = Math.floor(Math.random()*GameEvents.Tiers[tier].length);
                 GameEvents.Tiers[tier][randEvent]();
-            }            
+            
+            }
+            console.log(tier, score, randEvent);
         }else{
         }
     },
@@ -124,6 +130,9 @@ GameEvents = {
                 Game.addMonster();
                 Game.addMonster();
                 Game.addMonster();
+            },
+            function(){
+                Game.addCar();
             }
         ],
         1: [
@@ -140,6 +149,10 @@ GameEvents = {
             GameEvents.FinaleTriggered = true;
             for(var i = 0; i < 100; i++){
                 Game.addMonster();
+            }
+
+            for(var i = 0; i < 50; i++){
+                Game.addBagger();
             }
         }
     
