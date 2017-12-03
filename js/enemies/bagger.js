@@ -76,6 +76,7 @@ Crafty.c('BaggerCharacter', {
                 e[0].obj.destroy();
 
                 this.bodiesBagged++;
+                Game.collectedBodies++;
                 this.health+= this.bodyHealthValue;
             }
         });

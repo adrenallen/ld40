@@ -580,6 +580,11 @@ Crafty.c('MonsterCharacter1', {
     },
     moveTowardsPlayer: function(){
         team1Target = findClosestTeam1(this.x, this.y);
+
+        if( typeof team1Target == 'undefined'){
+            return;
+        }
+        
         if(this.isPlaying("attack") && !this.hit('Team1') && this.reelPosition() >= 3){
             this.animate('idle', -1);
         }else if (this.isPlaying("attack")){
@@ -599,7 +604,7 @@ Crafty.c('MonsterCharacter1', {
             }
         }catch(e){
             // clearInterval(this.findPlayerInterval);
-            // console.log(e);
+            console.log(e);
         }
     },
     takeBulletDamage: function(hitData){

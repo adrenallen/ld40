@@ -11,6 +11,7 @@ Game = {
     levelProgress: 0,
     monsterKillPoints: 0,
     allyPoints: 0,
+    collectedBodies: 0,
     shooting: false,
     start: function(){
         Crafty.init(gameWidth,gameHeight);
@@ -19,7 +20,7 @@ Game = {
         Crafty.scene('Loading');
     },
     addMonster: function(x,y){
-        if(Crafty("MonsterCharacter1").get().length > maxMonsters.monster){
+        if(Crafty("MonsterCharacter1").get().length > maxMonsters.monster && !GameEvents.FinaleTriggered){
             return false;
         }else{
             monster = Crafty.e("MonsterCharacter1");
@@ -44,7 +45,7 @@ Game = {
         obj.trigger('MoveTowardsPlayer');
     },
     addBagger: function(x,y){
-        if(Crafty("BaggerCharacter").get().length > maxMonsters.bagger){
+        if(Crafty("BaggerCharacter").get().length > maxMonsters.bagger && !GameEvents.FinaleTriggered){
             return false;
         }else{
             monster = Crafty.e("BaggerCharacter");
@@ -58,7 +59,7 @@ Game = {
         }
     },
     addSnek: function(x,y){
-        if(Crafty("SnekCharacter").get().length > maxMonsters.snek){
+        if(Crafty("SnekCharacter").get().length > maxMonsters.snek && !GameEvents.FinaleTriggered){
             return false;
         }else{
             monster = Crafty.e("SnekCharacter");
@@ -143,6 +144,7 @@ Game = {
         Game.monsterKillPoints = 0;
         Game.allyPoints = 0;
         Game.shooting = false;
+        Game.collectedBodies = 0;
         // this.scoreDisplay.updateScore(0);
 
     }
@@ -330,12 +332,17 @@ GameEvents = {
 
             Game.addTurboGun();
 
-            for(var i = 0; i < 100; i++){
+            
+            for(var i = 0; i < 75; i++){
                 Game.addMonster();
             }
 
-            for(var i = 0; i < 50; i++){
+            for(var i = 0; i < 5; i++){
                 Game.addBagger();
+            }
+
+            for(var i = 0; i < 6; i++){    
+                Game.addSnek();
             }
         }
     

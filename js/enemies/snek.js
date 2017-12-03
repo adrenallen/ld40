@@ -162,6 +162,11 @@ Crafty.c('SnekCharacter', {
             return; //don't fire from off screen
         }
         this.firingRange = true;
+        if(x > this.x){
+            this.flip();
+        }else{
+            this.unflip();
+        }
         for(var i = 0; i < 1; i++){
             setTimeout(function(x,y,snek){
                 return function(){
