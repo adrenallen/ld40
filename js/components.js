@@ -1,5 +1,5 @@
 const movementSpeed = 100;
-const reviveConversionTime = 15000;
+const reviveConversionTime = 45000;
 
 Crafty.c('PlayerCharacterArms', {
     required: "2D, Canvas, Motion, spr_player_arms, Mouse",
@@ -456,7 +456,8 @@ Crafty.c('AllyCharacter', {
         monster = Crafty.e('MonsterCharacter1');
         monster.x = this.x;
         monster.y = this.y;
-        monster.health += this.health;
+        monster.health += this.health*2;
+        monster.speed += 20;
         clearInterval(this.shootInterval);
         Game.addAllyPoints(this.pointValue);
         this.destroy();

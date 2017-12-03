@@ -222,7 +222,7 @@ Crafty.scene('Game', function(){
     
     // test = Crafty.e('SnekCharacter').attr({x: 200, y:150});
 
-    Game.addSnek(200, 150);
+    // Game.addSnek(200, 150);
     // Game.addMonster(250, 150);
     // Game.addMonster(200, 170);
     // Game.addMonster(175, 130);

@@ -103,9 +103,9 @@ Crafty.c('MoveBox', {
     init: function(){
         this.color('blue');
         this.alpha = 0;
-        this.x = 300;
+        this.x = 275;
         this.y = 0;
-        this.w = 50;
+        this.w = 75;
         this.h = 300;
     }
 });

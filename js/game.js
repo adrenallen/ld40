@@ -60,7 +60,6 @@ Game = {
         car = Crafty.e('CarObject');
         car.x = gameWidth+(Math.random()*topWalkBound);
         car.y = (gameHeight*Math.random())+topWalkBound;
-        car.rotation = Math.floor(Math.random()*90)-45;
     },
     addTurboGun: function(x,y){
         gun = Crafty.e('TurboGun');
@@ -109,6 +108,8 @@ GameDirector = {
     eventHistory: [],
     eventPerScore: 300,
     tierScoreGap: 1000,
+    envPerMax: 300,
+    envLast: 0,
     lastPoll: [],
     lastScoreEvent: 0,
     direct: function(){
@@ -128,10 +129,15 @@ GameDirector = {
             }else{
                 randEvent = Math.floor(Math.random()*GameEvents.Tiers[tier].length);
                 GameEvents.Tiers[tier][randEvent]();
-            
             }
-        }else{
         }
+
+        if(Game.levelProgress > GameDirector.envLast + (Math.random()*GameDirector.envPerMax)+(GameDirector.envPerMax/4)){
+            GameEvents.Environment[Math.floor(GameEvents.Environment.length*Math.random())]();
+            GameDirector.envLast = Game.levelProgress;
+        }
+
+
     },
     reset: function(){
         this.eventHistory = [];
@@ -142,15 +148,17 @@ GameDirector = {
 
 GameEvents = {
     FinaleTriggered: false,
+    Environment: [
+        function(){
+            Game.addCar();
+        }
+    ],
     Tiers: {
         0: [
             function(){
                 Game.addMonster();
                 Game.addMonster();
                 Game.addMonster();
-            },
-            function(){
-                Game.addCar();
             }
         ],
         1: [
@@ -162,7 +170,10 @@ GameEvents = {
                 Game.addBagger();
             },
             function(){
-                Game.addTurboGun();
+                if(Math.random() > 0.75){
+                    Game.addTurboGun();
+                }
+                
             }
         ],
         2: [

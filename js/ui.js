@@ -60,7 +60,7 @@ Crafty.c('DamageOverlay', {
 });
 
 Crafty.c("GameIntroModal", {
-    required: "2D, Canvas, Color, Tween, Mouse",
+    required: "2D, Canvas, Image, Mouse",
     init: function(){
         padding = 25;
         this.attr({
@@ -71,25 +71,15 @@ Crafty.c("GameIntroModal", {
             z: 1500,
             alpha: 1
         });
-        this.color('lightgray');
+        this.image("assets/intro.png");
 
-        
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: gameHeight/5, z:1501}).text('Welcome to [game name here]!');
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2), z:1501}).text('CONTROLS:');
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*3), z:1501}).text('WASD or arrow keys to move');
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*4), z:1501}).text('Mouse to aim, left click to fire');
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*5), z:1501}).text('E to give antidote to a downed mutant');
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*6), z:1501}).text('C to destroy a body');
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*7), z:1501}).text('Enter to start the game');
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*9), z:1501}).text('Please see the github readme for more details!');
-    
         Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
         Game.reset();
     }
 });
 
 Crafty.c("GameOverModal", {
-    required: "2D, Canvas, Color, Tween, Mouse",
+    required: "2D, Canvas, Image, Mouse",
     init: function(){
         padding = 25;
         this.attr({
@@ -100,13 +90,43 @@ Crafty.c("GameOverModal", {
             z: 1500,
             alpha: 0.9
         });
-        this.color('lightgray');
+        this.image("assets/gameover.png");
 
+        timeToDisplay = 2500;
+
+        scrTO = 1;
+        if(timeToDisplay < Game.scoreCalculator()){
+            scrTO = Math.round(timeToDisplay/Game.scoreCalculator())
+        }
         
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: gameHeight/3, z:1501}).text('Game Over!');
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+padding, z:1501}).text('Final Score: ' + Game.scoreCalculator());
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+(padding*2), z:1501}).text('Distance travelled: '+ Game.fakeDistance() + "ft");
-        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+(padding*4), z:1501}).text('Press Enter to play again');
+        //Game.scoreCalculator()
+        score = Crafty.e("2D, Canvas, Text").attr({ x: 156+padding, y: 68+padding, z:1501}).text(0);
+        for( var i = 0; i < Game.scoreCalculator(); i++){
+            setTimeout(function(tx, scr){
+                return function(){
+                    tx.text(scr + ' points');
+                };
+            }(score, i), i*scrTO);
+        }
+        
+        distTO = 1;
+        if(timeToDisplay < Game.fakeDistance()){
+            distTO = Math.round(timeToDisplay/Game.fakeDistance())
+        }
+        //Game.fakeDistance();
+        distance = Crafty.e("2D, Canvas, Text").attr({ x: 156+padding, y: 110+padding, z:1501}).text(0);
+        for( var i = 0; i < Game.fakeDistance(); i++){
+            setTimeout(function(tx, scr){
+                return function(){
+                    tx.text(scr + ' ft');
+                };
+            }(distance, i), i*distTO);
+        }
+
+        // Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: gameHeight/3, z:1501}).text('Game Over!');
+        // score = Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+padding, z:1501}).text(Game.scoreCalculator());
+        // Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+(padding*2), z:1501}).text('Distance travelled: '+ Game.fakeDistance() + "ft");
+        // Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+(padding*4), z:1501}).text('Press Enter to play again');
         
         Crafty.e("2D, Keyboard").unbind('KeyDown', KeyboardCB.keydown);
         Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
