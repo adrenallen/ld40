@@ -188,7 +188,7 @@ Crafty.c('SnekCharacter', {
     },
     death: function(){
         Game.addMonsterKillPoints(this.pointValue);
-        this.destroy();
+        
         Crafty.audio.play('monsterdeath');
         
         monsterBody = Crafty.e("SnekBody");
@@ -198,6 +198,7 @@ Crafty.c('SnekCharacter', {
         }
         monsterBody.x = this.x;
         monsterBody.y = this.y;
+        this.destroy();
     }
 
 });
@@ -207,12 +208,16 @@ Crafty.c('SnekBody', {
     required: "2D, Canvas, MonsterBodyActor, SpriteAnimation, spr_snek, Body",
     init: function(){
         this.origin("center");
-        this.reel("death", 600, [
-            [3,1]
+        this.reel("death", 1000, [
+            [2,1],[0,2],[1,2],[2,2],[3,2]
         ]);
         this.animate("death", 1);
-        // this.shift(0,0,0,-1*this.h/2);
-        // this.height=this.height/8;
+        this.collision([
+            2,24,
+            27,27,
+            31,31,
+            2,31
+        ]);
     }
 
 });

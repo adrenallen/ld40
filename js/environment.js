@@ -93,7 +93,7 @@ Crafty.c('SolidBottomPlayerOnly', {
 Crafty.c('BloodSpot', {
     required: "2D, Canvas, spr_bloodspot, Scrolls",
     init: function(){
-        this.origin('center');
+        // this.origin('center');
         console.log("building one");
     }
 });

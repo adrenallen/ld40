@@ -503,7 +503,7 @@ Crafty.c('AllyCharacter', {
 Crafty.c('MonsterCharacter1', {
     required: "2D, Canvas, MonsterActor, spr_monster1, Motion, SpriteAnimation",
     init: function(){
-        this.x = ((Crafty.viewport.width+50)*Math.random())-(Math.random()*50)
+        this.x = ((Crafty.viewport.width+50)*Math.random())-(Math.random()*50);
         this.y = (Crafty.viewport.height*Math.random())+75;
         this.origin("center");
         this.damage = 25;
