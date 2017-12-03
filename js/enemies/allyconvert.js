@@ -66,28 +66,31 @@ Crafty.c('AllyConvertCharacter', {
             this.findPlayerInterval = setInterval(function(mon){ mon.moveTowardsPlayer(); }, 100, this);
         }
         team1Target = findClosestTeam1(this.x, this.y);
-        if(this.isPlaying("attack") && !this.hit('Team1') && this.reelPosition() >= 3){
-            this.animate('run', -1);
-        }else if (this.isPlaying("attack")){
-            this.velocity().x = 0;
-            this.velocity().y = 0;
-            return;
-        }else if (!this.isPlaying('run')){
-            this.animate('run', -1);
-        }
-        try{
-            delta = findEntityDelta(this.x, this.y, team1Target);
-            this.velocity().x = delta.vx*this.speed;
-            this.velocity().y = delta.vy*this.speed;
 
-            if(delta.vx > 0){
-                this.flip();
-            }else{
-                this.unflip();
+        if(typeof team1Target != 'undefined'){
+            if(this.isPlaying("attack") && !this.hit('Team1') && this.reelPosition() >= 3){
+                this.animate('run', -1);
+            }else if (this.isPlaying("attack")){
+                this.velocity().x = 0;
+                this.velocity().y = 0;
+                return;
+            }else if (!this.isPlaying('run')){
+                this.animate('run', -1);
             }
-        }catch(e){
-            // clearInterval(this.findPlayerInterval);
-            console.log(e);
+            try{
+                delta = findEntityDelta(this.x, this.y, team1Target);
+                this.velocity().x = delta.vx*this.speed;
+                this.velocity().y = delta.vy*this.speed;
+
+                if(delta.vx > 0){
+                    this.flip();
+                }else{
+                    this.unflip();
+                }
+            }catch(e){
+                // clearInterval(this.findPlayerInterval);
+                console.log(e);
+            }
         }
     },
     takeBulletDamage: function(hitData){

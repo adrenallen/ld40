@@ -162,7 +162,7 @@ Crafty.c('SnekCharacter', {
             return; //don't fire from off screen
         }
         this.firingRange = true;
-        for(var i = 0; i < 2; i++){
+        for(var i = 0; i < 1; i++){
             setTimeout(function(x,y,snek){
                 return function(){
                     bomb = Crafty.e('SnekBomb');
@@ -181,7 +181,6 @@ Crafty.c('SnekCharacter', {
                     bomb.fireDirection(x, y-snek.fireSpread);
                 };
             }(x,y,this), i*100);
-            
         }        
     },
     takeBulletDamage: function(hitData){

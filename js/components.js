@@ -420,6 +420,9 @@ Crafty.c('AllyCharacter', {
         },800, this);
     },
     moveTowardsPlayer: function(){
+        if(Crafty("PlayerCharacter").get().length < 1){
+            return;
+        }
         if (this.findPlayerInterval === false){
             this.findPlayerInterval = setInterval(function(mon){ mon.moveTowardsPlayer(); }, 100, this);
             this.arms.visible = true;   //This doesn't work quite right but close enuff
@@ -812,6 +815,9 @@ function distanceToPlayer(x, y){
 }
 
 function distanceToEntity(x,y,ent){
+    if (typeof ent == 'undefined'){
+        return 0;
+    }
     return calculateDistanceBetween(ent.attr('x'), ent.attr('y'), x, y);
 }
 
