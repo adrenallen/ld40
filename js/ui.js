@@ -27,6 +27,13 @@ Crafty.c('PlayerHealthBar', {
     }
 });
 
+Crafty.c('PlayerScore', {
+    required: "2D, Canvas,",
+    init: function(){
+
+    }
+});
+
 Crafty.c('DamageOverlay', {
     required: "2D, Canvas, Color, Tween",
     init: function(){

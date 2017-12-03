@@ -12,6 +12,7 @@ Crafty.c('BaggerCharacter', {
         this.bodyHealthValue = 10;
         this.health = 100;
         this.huntPeopleDistance = 50;
+        this.pointValue = 100;
 
         //TODO better collision
         this.collision([
@@ -161,6 +162,7 @@ Crafty.c('BaggerCharacter', {
         }
     },
     death: function(){
+        Game.monsterKillPoints += this.pointValue;
         this.destroy();
         Crafty.audio.play('monsterdeath');
         

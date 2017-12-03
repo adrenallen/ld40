@@ -171,7 +171,7 @@ Crafty.c('PlayerCharacter', {
             
             player.arms.visible = false;
             
-            player.resetMotion();
+            // player.resetMotion();
             player.fourway(0.0000001);
             player.animate("revive", 1);
             
@@ -191,9 +191,9 @@ Crafty.c('PlayerCharacter', {
             
         });
     },
-
+    
     stopAttemptReviveBody: function(){
-        this.ignoreHits('MonsterBodyActor');
+        this.ignoreHits('ReviveBody');
     },
 
     takeBulletDamage: function(hitData){
@@ -264,6 +264,7 @@ Crafty.c('AllyCharacter', {
             12, 16,
             3, 16,
             3, 8]);
+        this.pointValue = 10;
 
         if(this.followDistance < this.followDistanceMin){
             this.followDistance+= this.followDistanceMin;
@@ -379,6 +380,7 @@ Crafty.c('AllyCharacter', {
         Crafty.audio.play('allydeath');
         clearInterval(this.conversionTimer);
         clearInterval(this.shootInterval);
+        Game.allyPoints += this.pointValue;
         this.destroy();
         allyBody = Crafty.e("AllyBody1");
         
@@ -401,6 +403,7 @@ Crafty.c('MonsterCharacter1', {
         this.damage = 25;
         this.z = 750;
         this.health = 20;   
+        this.pointValue = 10;
         
         this.onHit('Projectile', this.takeBulletDamage);
         this.onHit('PlayerBullet', this.takeBulletDamage);
@@ -473,6 +476,7 @@ Crafty.c('MonsterCharacter1', {
         }
     },
     death: function(){
+        Game.monsterKillPoints += this.pointValue;
         this.destroy();
         Crafty.audio.play('monsterdeath');
         

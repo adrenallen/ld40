@@ -74,6 +74,16 @@ var assetsObj = {
             paddingY: 0,
             paddingAroundBorder: 0
         },
+        "sprites/road.png":{
+            tile: 700,
+            tileh: 175,
+            map: {
+                spr_road: [0,0],
+            },
+            paddingX: 0,
+            paddingY: 0,
+            paddingAroundBorder: 0
+        },
         "sprites/car.png":{
             tile: 48,
             tileh: 48,
@@ -101,6 +111,8 @@ Crafty.paths({
     audio: "assets/audio/"
 });
 
+Crafty.pixelart(true);
+
 Crafty.scene('Loading', function(){
     
     //load player sprite sheet
@@ -123,6 +135,10 @@ Crafty.scene('Game', function(){
 
     Crafty.e("TopBuildings");
     repeater = Crafty.e("TopBuildings");
+    repeater.x = repeater.w;
+
+    Crafty.e("BottomRoad");
+    repeater = Crafty.e("BottomRoad");
     repeater.x = repeater.w;
 
     bottomBound = Crafty.e("SolidBottomPlayerOnly");

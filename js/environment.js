@@ -1,4 +1,3 @@
-//dead bodies of monsters
 Crafty.c('TopBuildings', {
     required: "2D, Canvas, Collision, Color, Solid, spr_building, Scrolls",
     init: function(){
@@ -25,6 +24,38 @@ Crafty.c('TopBuildings', {
             //build new one
             Crafty.e("TopBuildings");
             repeater = Crafty.e("TopBuildings");
+            repeater.x = repeater.w;
+        }
+
+    }
+});
+
+Crafty.c('BottomRoad', {
+    required: "2D, Canvas, spr_road, Scrolls",
+    init: function(){
+        this.x = 0;
+        this.y = 76;
+        this.w = 700;
+        this.h = 175;
+        this.z=0;
+
+
+        this.bind('Move', function(e){
+            return function(){
+                e.checkForRepeat();
+            }
+        }(this));
+    },
+    checkForRepeat: function(){
+        if(this.x <= -1*this.w){
+            
+            roads = Crafty('BottomRoad').get();
+            for(var i =0; i < roads.length; i++){
+                roads[i].destroy();
+            }
+            //build new one
+            Crafty.e("BottomRoad");
+            repeater = Crafty.e("BottomRoad");
             repeater.x = repeater.w;
         }
 
