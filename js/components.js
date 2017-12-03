@@ -51,13 +51,19 @@ Crafty.c('PlayerCharacter', {
         this.arms = Crafty.e('PlayerCharacterArms');
         this.attach(this.arms);
 
-        this.reel('idle', 1000, [[0,0]]);
-        this.animate('idle', -1);
+        this.reel('idle', 1000, [[0,0], [0,0]]);
+        // this.animate('idle', -1);
+        
 
         this.reel("revive", 1500, [
             [0,1], [1,1], [2,1], [3,1]
         ]);
 
+        this.reel("run", 500, [
+            [0,2], [1,2], [2,2], [3,2]
+        ]);
+
+        // this.animate("run", -1);
         //TODO - some kind of timeout so you can only be hurt so many times a second
         
         this.fourway(movementSpeed);
@@ -67,9 +73,18 @@ Crafty.c('PlayerCharacter', {
         // this.onHit('MonsterActor', this.takeMonsterDamage);
 
         //TODO make this show the run animation (that doesn't exist yet ;P)
-        this.bind("MotionChange", function(e){
-            // console.log(e)
-        });
+        this.bind("MotionChange", function(player){
+            return function(){
+                if(player.velocity().x !== 0 || player.velocity().y !== 0){
+                    if(!player.isPlaying('run') && !player.isPlaying('revive')){
+                        player.animate("run", -1);
+                    }
+                    
+                }else if(!player.isPlaying('revive')){
+                    player.animate("idle", -1);
+                }
+            };            
+        }(this));
 
         this.onHit('Solid', function(e){
             hitData = e[0];
@@ -384,7 +399,7 @@ Crafty.c('MonsterCharacter1', {
             
         ]);
 
-        this.speed = 25;
+        this.speed = 40;
         
 
         this.findPlayerInterval = setInterval(function(mon){ mon.moveTowardsPlayer(); }, 100, this);

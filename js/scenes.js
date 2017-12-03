@@ -8,7 +8,7 @@ var assetsObj = {
                 spr_player_arms: [1,0]
             },
             paddingX: 0,
-            paddingY: 1,
+            paddingY: 0,
             paddingAroundBorder: 0
         },
         "sprites/ally1.png" :{
@@ -20,7 +20,7 @@ var assetsObj = {
                 spr_ally1_arms: [0,1]
             },
             paddingX: 0,
-            paddingY: 1,
+            paddingY: 0,
             paddingAroundBorder: 0
         },
         "sprites/bullet.png" :{
@@ -30,7 +30,7 @@ var assetsObj = {
                 spr_bullet: [0,0]
             },
             paddingX: 0,
-            paddingY: 1,
+            paddingY: 0,
             paddingAroundBorder: 0
         },
         "sprites/monster1.png" :{
@@ -41,7 +41,7 @@ var assetsObj = {
                 spr_monster1_body: [0,1]
             },
             paddingX: 0,
-            paddingY: 1,
+            paddingY: 0,
             paddingAroundBorder: 0
         },
         "sprites/cursor.png" :{
@@ -51,7 +51,7 @@ var assetsObj = {
                 spr_cursor: [0,0],
             },
             paddingX: 0,
-            paddingY: 1,
+            paddingY: 0,
             paddingAroundBorder: 0
         },
         "sprites/buildings.png":{
@@ -61,7 +61,17 @@ var assetsObj = {
                 spr_building: [0,0],
             },
             paddingX: 0,
-            paddingY: 1,
+            paddingY: 0,
+            paddingAroundBorder: 0
+        },
+        "sprites/car.png":{
+            tile: 48,
+            tileh: 48,
+            map: {
+                spr_car: [0,0],
+            },
+            paddingX: 0,
+            paddingY: 0,
             paddingAroundBorder: 0
         },
     },
@@ -124,6 +134,9 @@ Crafty.scene('Game', function(){
     Crafty.e("DamageOverlay");
     Crafty.e("MoveBox");
     
+    car = Crafty.e('CarObject');
+    car.x = 200;
+    car.y = 150;
 
     this.player.x=25;
     this.player.y=150;
@@ -164,7 +177,7 @@ Crafty.scene('Game', function(){
             cursor.x = e.offsetX;
             cursor.y = e.offsetY;
         }catch(e){
-            console.log(e)
+            console.log(e);
         }
     });
 

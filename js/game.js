@@ -28,6 +28,8 @@ Game = {
             moveThese[i].shift(-1*v,0,0,0);
         }
         this.levelProgress += v;
+        console.log(this.levelProgress);
+
     }
     
 };
