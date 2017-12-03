@@ -33,6 +33,16 @@ var assetsObj = {
             paddingY: 0,
             paddingAroundBorder: 0
         },
+        "sprites/medkit.png" :{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_medkit: [0,0]
+            },
+            paddingX: 0,
+            paddingY: 0,
+            paddingAroundBorder: 0
+        },
         "sprites/turbogun.png" :{
             tile: 16,
             tileh: 16,
@@ -154,7 +164,8 @@ var assetsObj = {
         "revive": ["revive.wav"],
         "allydeath": ["allydeath.wav"],
         "convert": ["convert.wav"],
-        "background": ["background.mp3"]
+        "background": ["background.mp3"],
+        "heal" : ["heal.wav"]
     }
 };
 
@@ -221,6 +232,7 @@ Crafty.scene('Game', function(){
     this.player.x=25;
     this.player.y=150;
 
+    // Game.addMedkit(200,200);
     //spawns allies
     // for(var i = 0; i < 10; i++){
     //     test = Crafty.e("AllyCharacter").attr({x: -1*(i*20), y: 100+(i*5)});

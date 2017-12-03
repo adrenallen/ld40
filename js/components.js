@@ -1,5 +1,5 @@
 const movementSpeed = 100;
-const reviveConversionTime = 45000;
+const reviveConversionTime = 60000; //actual conversion time is Math.random() to this
 
 Crafty.c('PlayerCharacterArms', {
     required: "2D, Canvas, Motion, spr_player_arms, Mouse",
@@ -277,6 +277,13 @@ Crafty.c('PlayerCharacter', {
         if (this.health < 1){
             this.death();
         }
+    },
+    takeHeal: function(heal){
+        this.health += heal;
+        if(this.health > this.healthBar.maxHealth){
+            this.health = this.healthBar.maxHealth;
+        }
+        this.healthBar.adjustHealthBar(this.health);        
     },
     death: function(){
         // Crafty.scene('GameOver');
@@ -718,7 +725,7 @@ Crafty.c('MonsterBodyActor', {
             }(newAlly));
 
             newAlly.conversionTimer = setTimeout(function(e){
-                return function(){ e.convertToMonster(); }; }(newAlly), reviveConversionTime);
+                return function(){ e.convertToMonster(); }; }(newAlly), Math.floor(reviveConversionTime*Math.random()));
         }
     },
     

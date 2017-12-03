@@ -32,6 +32,17 @@ Game = {
             }
         }
     },
+    addAlly: function(x,y){
+        obj = Crafty.e("AllyCharacter");
+        if (x && y){
+            obj.x = x;
+            obj.y = y;
+        }else{
+            obj.x = gameWidth+(Math.random()*topWalkBound);
+            obj.y = (gameHeight*Math.random())+topWalkBound;
+        }
+        obj.trigger('MoveTowardsPlayer');
+    },
     addBagger: function(x,y){
         if(Crafty("BaggerCharacter").get().length > maxMonsters.bagger){
             return false;
@@ -67,13 +78,28 @@ Game = {
     },
     addBox: function(x,y){
         obj = Crafty.e('BoxObject');
-        obj.x = gameWidth+(Math.random()*topWalkBound);
-        obj.y = (gameHeight*Math.random())+topWalkBound;
+        if (x && y){
+            obj.x = x;
+            obj.y = y;
+        }else{
+            obj.x = gameWidth+(Math.random()*topWalkBound);
+            obj.y = (gameHeight*Math.random())+topWalkBound;
+        }
     },
     addTurboGun: function(x,y){
         gun = Crafty.e('TurboGun');
         gun.x = gameWidth+(Math.random()*topWalkBound);
         gun.y = (gameHeight*Math.random())+topWalkBound;
+    },
+    addMedkit: function(x,y){
+        obj = Crafty.e('Medkit');
+        if (x && y){
+            obj.x = x;
+            obj.y = y;
+        }else{
+            obj.x = gameWidth+(Math.random()*topWalkBound);
+            obj.y = (gameHeight*Math.random())+topWalkBound;
+        }
     },
     moveMap: function(v){
         moveThese = Crafty("Scrolls").get();
@@ -166,6 +192,11 @@ GameEvents = {
             Game.addBox();
             Game.addBox();
             Game.addBox();
+        },
+        function(){
+            if(Math.random() > 0.80){
+                Game.addAlly();
+            }            
         }
     ],
     Tiers: {
@@ -244,7 +275,10 @@ KeyboardCB = {
             if(!Game.shooting){
                 Game.shooting = true;
                 Game.shootInterval = setInterval(function(){
-                    Crafty('PlayerCharacter').get(0).fireBullet({offsetX: cursor.x, offsetY: cursor.y});
+                    player = Crafty('PlayerCharacter').get(0);
+                    if(typeof player != 'undefined'){
+                        player.fireBullet({offsetX: cursor.x, offsetY: cursor.y});
+                    }
                 }, 100, e);
             }
         }catch(e){

@@ -89,7 +89,7 @@ Crafty.c('BoxObject', {
             12,12,
             8,15,
             5,15,
-            
+
         ]);
     }
 });
@@ -134,6 +134,20 @@ Crafty.c('TurboGun', {
     pickedUp: function(hitDatas){
         hitData = hitDatas[0].obj;
         hitData.pickupTurboGun();
+        this.destroy();
+    }
+});
+
+Crafty.c('Medkit', {
+    required: "2D, Canvas, Collision, SpriteAnimation, Scrolls, spr_medkit",
+    init: function(){
+        this.healAmount = 35;
+        this.onHit('PlayerCharacter', this.pickedUp);
+    },
+    pickedUp: function(hitDatas){
+        hitData = hitDatas[0].obj;
+        hitData.takeHeal(this.healAmount);
+        Crafty.audio.play('heal');
         this.destroy();
     }
 });

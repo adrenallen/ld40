@@ -235,7 +235,7 @@ Crafty.c('SnekBomb', {
         Crafty.audio.play('defaultgun');
         this.origin('center');
         this.bulletSpeed = 250;
-        this.damage = 35;
+        this.damage = 20;
         this.z = 999;
         this.collision([
             4,10,
