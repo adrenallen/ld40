@@ -153,7 +153,8 @@ var assetsObj = {
         "monsterdeath": ['monsterdeath.wav'],
         "revive": ["revive.wav"],
         "allydeath": ["allydeath.wav"],
-        "convert": ["convert.wav"]
+        "convert": ["convert.wav"],
+        "background": ["background.mp3"]
     }
 };
 
@@ -179,13 +180,9 @@ Crafty.scene('Intro', function(){
     Crafty.e('GameIntroModal');
 });
 
-Crafty.scene('GameOver', function(){
-    Crafty.e("2D, Canvas, Text").attr({ x: 100, y: 100 }).text("You died!");
-    Crafty.audio.play('losegame');
-});
 
 Crafty.scene('Game', function(){
-    
+    Crafty.audio.play('background', -1, 0.1);
     setInterval(GameDirector.direct, 100);
     //add player to the game!
     this.player = Crafty.e("PlayerCharacter");

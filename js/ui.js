@@ -81,6 +81,8 @@ Crafty.c("GameIntroModal", {
 Crafty.c("GameOverModal", {
     required: "2D, Canvas, Image, Mouse",
     init: function(){
+        Crafty.audio.pause('background');
+        Crafty.audio.play('losegame');
         padding = 25;
         this.attr({
             x: padding,
@@ -128,6 +130,10 @@ Crafty.c("GameOverModal", {
         // Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+(padding*2), z:1501}).text('Distance travelled: '+ Game.fakeDistance() + "ft");
         // Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+(padding*4), z:1501}).text('Press Enter to play again');
         
+
+        Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mousedown", KeyboardCB.mousedown);
+        Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mouseup", KeyboardCB.mouseup);
+
         Crafty.e("2D, Keyboard").unbind('KeyDown', KeyboardCB.keydown);
         Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
     }
