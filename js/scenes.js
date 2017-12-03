@@ -158,6 +158,8 @@ Crafty.scene('Game', function(){
     // }
     
     Game.addMonster(100, 150);
+    Game.addMonster(200, 170);
+    Game.addMonster(175, 130);
 
     bag = Crafty.e('BaggerCharacter');
     bag.x = 200;
@@ -176,7 +178,10 @@ Crafty.scene('Game', function(){
     this.clickTracker = Crafty.e("2D");
 
     Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousedown", function(e){
-        Crafty('PlayerCharacter').get(0).fireBullet(e);
+        Crafty('PlayerCharacter').get(0).fireBullet({offsetX: cursor.x, offsetY: cursor.y});
+        Game.shootInterval = setInterval(function(){
+            Crafty('PlayerCharacter').get(0).fireBullet({offsetX: cursor.x, offsetY: cursor.y});
+        }, 100, e);
         
     });
 
@@ -184,10 +189,11 @@ Crafty.scene('Game', function(){
         clearInterval(Game.shootInterval);
     });
 
+    cursor = Crafty('CursorAimer').get(0)
+
     Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousemove", function(e){
         try{
-            Crafty('PlayerCharacterArms').get(0).pointToMouse(e);
-            cursor = Crafty('CursorAimer').get(0)
+            Crafty('PlayerCharacterArms').get(0).pointToMouse(e);        
             cursor.x = e.offsetX;
             cursor.y = e.offsetY;
         }catch(e){
@@ -209,5 +215,3 @@ Crafty.scene('Game', function(){
     
 
 });
-
-

@@ -44,6 +44,8 @@ Crafty.c('PlayerCharacter', {
 
         this.healthBar = Crafty.e('PlayerHealthBar');
         this.healthBar.maxHealth = this.health;
+        this.fireSpeed = 200;
+        this.fireCooldown = false;
 
         //TODO - change sprite direction based on which way pointing
         this.direction = 1;
@@ -137,6 +139,15 @@ Crafty.c('PlayerCharacter', {
         if(this.isPlaying('revive')){
             return; //cant fire while reviving
         }
+
+        if(this.fireCooldown){
+            return; //cooldown in effect
+        }
+
+        this.fireCooldown = true;
+        setTimeout(function(e){ return function(){
+            e.fireCooldown = false;
+        }}(this), this.fireSpeed);
 
         var newBullet = Crafty.e("PlayerBullet");
 
@@ -594,7 +605,7 @@ Crafty.c('PlayerBullet', {
         Crafty.audio.play('defaultgun');
         this.origin('center');
         this.bulletSpeed = 500;
-        this.damage = 5;
+        this.damage = 10;
         this.collision([
             6,5,
             10,5,

@@ -5,13 +5,13 @@ Crafty.c('BaggerCharacter', {
         this.y = (Crafty.viewport.height*Math.random())+75;
         //TODO make monsters spawn outside of the range
         this.origin("center");
-        this.damage = 15;
+        this.damage = 30;
         this.z = 750;
         this.bodiesBagged = 0;
         this.bodiesNeeded = 5;
         this.bodyHealthValue = 10;
         this.health = 100;
-        this.huntPeopleDistance = 30;
+        this.huntPeopleDistance = 50;
 
         //TODO better collision
         this.collision([
@@ -108,8 +108,8 @@ Crafty.c('BaggerCharacter', {
             }    
         }else{
             if(this.isPlaying("attack")){
-                this.velocity().x = 0;   
-                this.velocity().y = 0;
+                this.velocity().x = 1;   
+                this.velocity().y = 1;
                 return;
             }
 
@@ -129,7 +129,13 @@ Crafty.c('BaggerCharacter', {
                 }else{
                     //escape off screen until next body
                     this.animate('run', -1);
-                    
+                    if(this.x < Crafty.viewport.width+this.huntPeopleDistance){
+                        this.velocity().x = this.speed;
+                        this.flip();
+                    }else{
+                        this.velocity().x = 0;
+                        this.velocity().y = 0;
+                    }
                 }
             }catch(e){
                 console.log(e);

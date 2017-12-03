@@ -5,6 +5,9 @@ const maxMonsters = 3;
 
 Game = {
     levelProgress: 0,
+    monsterKillPoints: 0,
+    allyPoints: 0,
+    difficultyMultiplier: 1,
     start: function(){
         Crafty.init(gameWidth,gameHeight);
         Crafty.background('gray');
@@ -29,6 +32,9 @@ Game = {
         }
         this.levelProgress += v;
         console.log(this.levelProgress);
+
+    },
+    difficultyCalculator: function(){
 
     }
     
