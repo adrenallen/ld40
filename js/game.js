@@ -86,6 +86,16 @@ Game = {
             obj.y = (gameHeight*Math.random())+topWalkBound;
         }
     },
+    addAllyConvert: function(x,y){
+        monster = Crafty.e("AllyConvertCharacter");
+        if (x && y){
+            monster.x = x;
+            monster.y = y;
+        }else{
+            monster.x = gameWidth+(Math.random()*topWalkBound);
+            monster.y = (gameHeight*Math.random())+topWalkBound;
+        }
+    },
     addTurboGun: function(x,y){
         gun = Crafty.e('TurboGun');
         gun.x = gameWidth+(Math.random()*topWalkBound);
@@ -197,6 +207,11 @@ GameEvents = {
             if(Math.random() > 0.80){
                 Game.addAlly();
             }            
+        },
+        function(){
+            if(Math.random() > 0.90){
+                Game.addMedkit();
+            }
         }
     ],
     Tiers: {
@@ -213,7 +228,7 @@ GameEvents = {
                 Game.addMonster();
                 Game.addMonster();
                 Game.addMonster();
-                Game.addBagger();
+                Game.addAlly();
             },
             function(){
                 if(Math.random() > 0.75){
@@ -226,6 +241,9 @@ GameEvents = {
                     Game.addMonster();
                     Game.addMonster();
                     Game.addMonster();
+                    Game.addAlly();
+                    Game.addAlly();
+                    Game.addAlly();
                 }
                 
             }
@@ -235,8 +253,7 @@ GameEvents = {
                 Game.addMonster();
                 Game.addMonster();
                 Game.addMonster();
-                Game.addMonster();
-                Game.addSnek();
+                Game.addBagger();
             }
         ],
         3: [
@@ -244,11 +261,67 @@ GameEvents = {
                 Game.addMonster();
                 Game.addMonster();
                 Game.addMonster();
+                Game.addSnek();
+            },
+            function(){
+                Game.addSnek();
+                Game.addSnek();
+                Game.addMedkit();
+            },
+            function(){
                 Game.addMonster();
-                Game.addSnek();
-                Game.addSnek();
-                Game.addSnek();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
                 Game.addBagger();
+                Game.addMedkit();
+            }
+        ],
+        4: [
+            function(){
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+
+                Game.addSnek();
+                Game.addSnek();
+                Game.addSnek();
+            },
+            function(){
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+            },
+            function(){
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addBagger();
+                Game.addAlly();
+                Game.addAlly();
             }
         ]
     },

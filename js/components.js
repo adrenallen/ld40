@@ -460,11 +460,17 @@ Crafty.c('AllyCharacter', {
     },
     convertToMonster: function(){
         Crafty.audio.play('convert');
-        monster = Crafty.e('MonsterCharacter1');
+        monster = Crafty.e('AllyConvertCharacter');
         monster.x = this.x;
         monster.y = this.y;
-        monster.health += this.health*2;
-        monster.speed += 20;
+        monster.animate('convert');
+        monster.one('AnimationEnd', function(e){
+            return function(){
+                e.moveTowardsPlayer();
+            };            
+        }(monster));
+
+
         clearInterval(this.shootInterval);
         Game.addAllyPoints(this.pointValue);
         this.destroy();

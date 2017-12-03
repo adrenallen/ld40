@@ -84,6 +84,16 @@ var assetsObj = {
             paddingY: 0,
             paddingAroundBorder: 0
         },
+        "sprites/allyconvert.png" :{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_allyconvert: [0,0],
+            },
+            paddingX: 0,
+            paddingY: 0,
+            paddingAroundBorder: 0
+        },
         "sprites/snek.png" :{
             tile: 32,
             tileh: 32,
@@ -232,6 +242,7 @@ Crafty.scene('Game', function(){
     this.player.x=25;
     this.player.y=150;
 
+    Game.addMonster(200,200);
     // Game.addMedkit(200,200);
     //spawns allies
     // for(var i = 0; i < 10; i++){
