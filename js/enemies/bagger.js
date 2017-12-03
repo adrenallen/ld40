@@ -3,7 +3,7 @@ Crafty.c('BaggerCharacter', {
     init: function(){
         this.x = ((Crafty.viewport.width+50)*Math.random())-(Math.random()*50)
         this.y = (Crafty.viewport.height*Math.random())+75;
-        //TODO make monsters spawn outside of the range
+        
         this.origin("center");
         this.damage = 30;
         this.z = 750;
@@ -14,7 +14,7 @@ Crafty.c('BaggerCharacter', {
         this.huntPeopleDistance = 50;
         this.pointValue = 100;
 
-        //TODO better collision
+        
         this.collision([
             2,6,
             8,4,

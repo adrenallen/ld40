@@ -52,7 +52,7 @@ Crafty.c('PlayerCharacter', {
         this.fireSpeed = this.defaultFireSpeed;
         this.fireCooldown = false;
 
-        //TODO - change sprite direction based on which way pointing
+        
         this.direction = 1;
 
         this.arms = Crafty.e('PlayerCharacterArms');
@@ -84,8 +84,7 @@ Crafty.c('PlayerCharacter', {
             [1,4], [2,4], [3,4]
         ]);
 
-        // this.animate("run", -1);
-        //TODO - some kind of timeout so you can only be hurt so many times a second
+        
         
         this.fourway(movementSpeed);
         this.onHit('Projectile', this.takeBulletDamage);
@@ -93,7 +92,7 @@ Crafty.c('PlayerCharacter', {
         //this is now done via the monster classes
         // this.onHit('MonsterActor', this.takeMonsterDamage);
 
-        //TODO make this show the run animation (that doesn't exist yet ;P)
+        
         this.bind("MotionChange", function(player){
             return function(){
                 if(player.velocity().x !== 0 || player.velocity().y !== 0){
@@ -181,7 +180,6 @@ Crafty.c('PlayerCharacter', {
         }
         var newBullet = Crafty.e("PlayerBullet");
 
-        //TODO - make it appear ahead of the way we are looking slightly
         newBullet.x = this.attr('x');
         newBullet.y = this.attr('y'); //8 because sprite is 16x16
         //set the click direction for bullet
@@ -288,7 +286,6 @@ Crafty.c('PlayerCharacter', {
         this.destroy();
 
         Crafty.e('GameOverModal');
-        //TODO display the score and option to go back to main menu or quick restart
     }
 });
 
@@ -477,7 +474,7 @@ Crafty.c('AllyCharacter', {
     fireBullet: function(x,y){
         var newBullet = Crafty.e("PlayerBullet");
 
-        //TODO - make it appear ahead of the way we are looking slightly
+        
         newBullet.x = this.attr('x');
         newBullet.y = this.attr('y');
         //set the click direction for bullet
@@ -508,7 +505,6 @@ Crafty.c('MonsterCharacter1', {
     init: function(){
         this.x = ((Crafty.viewport.width+50)*Math.random())-(Math.random()*50)
         this.y = (Crafty.viewport.height*Math.random())+75;
-        //TODO make monsters spawn outside of the range
         this.origin("center");
         this.damage = 25;
         this.z = 750;
