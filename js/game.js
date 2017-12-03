@@ -42,6 +42,20 @@ Game = {
             }
         }
     },
+    addSnek: function(x,y){
+        if(Crafty("MonsterActor").get().length > maxMonsters){
+            return false;
+        }else{
+            monster = Crafty.e("SnekCharacter");
+            if (x && y){
+                monster.x = x;
+                monster.y = y;
+            }else{
+                monster.x = gameWidth+(Math.random()*topWalkBound);
+                monster.y = (gameHeight*Math.random())+topWalkBound;
+            }
+        }
+    },
     addCar: function(x,y){
         car = Crafty.e('CarObject');
         car.x = gameWidth+(Math.random()*topWalkBound);

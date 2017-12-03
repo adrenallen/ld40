@@ -1,7 +1,7 @@
 Crafty.c('BaggerCharacter', {
     required: "2D, Canvas, MonsterActor, spr_bagger, Motion, SpriteAnimation",
     init: function(){
-        this.x = ((Crafty.viewport.width+50)*Math.random())-(Math.random()*50)
+        this.x = ((Crafty.viewport.width+50)*Math.random())-(Math.random()*50);
         this.y = (Crafty.viewport.height*Math.random())+75;
         
         this.origin("center");
@@ -10,7 +10,7 @@ Crafty.c('BaggerCharacter', {
         this.bodiesBagged = 0;
         this.bodiesNeeded = 5;
         this.bodyHealthValue = 10;
-        this.health = 75;
+        this.health = 65;
         this.huntPeopleDistance = 50;
         this.pointValue = 100;
 
@@ -50,8 +50,10 @@ Crafty.c('BaggerCharacter', {
         ]);
         
         
-
-        this.animate("run", -1);
+        if(!this.isPlaying("run")){
+            this.animate("run", -1);
+        }
+        
 
         this.onHit('Team1', function(e){
             if(!this.isPlaying("attack")){
@@ -131,7 +133,10 @@ Crafty.c('BaggerCharacter', {
                     }
                 }else{
                     //escape off screen until next body
-                    this.animate('run', -1);
+                    if(!this.isPlaying('run')){
+                        this.animate('run', -1);
+                    }
+                    
                     if(this.x < Crafty.viewport.width+this.huntPeopleDistance){
                         this.velocity().x = this.speed;
                         this.flip();
