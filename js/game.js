@@ -36,6 +36,17 @@ Game = {
     },
     difficultyCalculator: function(){
 
+    },
+    addMonsterKillPoints: function(points){
+        this.monsterKillPoints += points;
+        Crafty('PlayerCharacter').get(0).scoreDisplay.updateScore(this.scoreCalculator());
+    },
+    addAllyPoints: function(points){
+        this.allyPoints += points;
+        Crafty('PlayerCharacter').get(0).scoreDisplay.updateScore(this.scoreCalculator());
+    },
+    scoreCalculator: function(){
+        return this.monsterKillPoints-this.allyPoints;
     }
     
 };

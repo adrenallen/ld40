@@ -78,7 +78,6 @@ Crafty.c('BaggerCharacter', {
 
         this.bind("MotionChange", function(mon){
             return function(){
-                console.log(mon.velocity());
                 if(mon.velocity().x !== 0 || mon.velocity().y !== 0){
                     mon.animate("run", -1);
                 }else if(!mon.isPlaying('bag')){
@@ -162,7 +161,7 @@ Crafty.c('BaggerCharacter', {
         }
     },
     death: function(){
-        Game.monsterKillPoints += this.pointValue;
+        Game.addMonsterKillPoints(this.pointValue);
         this.destroy();
         Crafty.audio.play('monsterdeath');
         

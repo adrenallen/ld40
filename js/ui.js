@@ -28,9 +28,14 @@ Crafty.c('PlayerHealthBar', {
 });
 
 Crafty.c('PlayerScore', {
-    required: "2D, Canvas,",
+    required: "2D, Canvas,Text",
     init: function(){
-
+        this.scoreText = Crafty.e("2D, Canvas, Text").attr({ x: 275, y: 10, h: 12});
+        this.scoreText.z=1000;
+        this.updateScore(0);
+    },
+    updateScore: function(score){
+        this.scoreText.text('Score: '+score);
     }
 });
 
