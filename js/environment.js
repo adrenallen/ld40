@@ -110,3 +110,15 @@ Crafty.c('MoveBox', {
     }
 });
 
+Crafty.c('TurboGun', {
+    required: "2D, Canvas, Collision, SpriteAnimation, Scrolls, spr_turbogun",
+    init: function(){
+        this.onHit('PlayerCharacter', this.pickedUp);
+    },
+    pickedUp: function(hitDatas){
+        hitData = hitDatas[0].obj;
+        hitData.pickupTurboGun();
+        this.destroy();
+    }
+});
+

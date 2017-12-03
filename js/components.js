@@ -45,7 +45,11 @@ Crafty.c('PlayerCharacter', {
         this.healthBar = Crafty.e('PlayerHealthBar');
         Game.scoreDisplay = Crafty.e('PlayerScore');
         this.healthBar.maxHealth = this.health;
-        this.fireSpeed = 200;
+        this.turboFireSpeed = 10;
+        this.defaultFireSpeed = 200;
+        this.ammoCount = 0;
+
+        this.fireSpeed = this.defaultFireSpeed;
         this.fireCooldown = false;
 
         //TODO - change sprite direction based on which way pointing
@@ -148,6 +152,11 @@ Crafty.c('PlayerCharacter', {
 
         
     },
+    pickupTurboGun: function(){
+        this.fireSpeed = this.turboFireSpeed;
+        this.fireCooldown = false;
+        this.ammoCount = 150;
+    },
 
     fireBullet: function(e){
 
@@ -164,6 +173,12 @@ Crafty.c('PlayerCharacter', {
             e.fireCooldown = false;
         }}(this), this.fireSpeed);
 
+        if(this.ammoCount <= 0 && this.fireSpeed != this.defaultFireSpeed){
+            this.fireSpeed = this.defaultFireSpeed;
+            this.fireCooldown = true;
+        }else{
+            this.ammoCount--;
+        }
         var newBullet = Crafty.e("PlayerBullet");
 
         //TODO - make it appear ahead of the way we are looking slightly

@@ -48,6 +48,11 @@ Game = {
         car.y = (gameHeight*Math.random())+topWalkBound;
         car.rotation = Math.floor(Math.random()*90)-45;
     },
+    addTurboGun: function(x,y){
+        gun = Crafty.e('TurboGun');
+        gun.x = gameWidth+(Math.random()*topWalkBound);
+        gun.y = (gameHeight*Math.random())+topWalkBound;
+    },
     moveMap: function(v){
         moveThese = Crafty("Scrolls").get();
         for (var i = 0; i < moveThese.length; i++){
@@ -142,11 +147,17 @@ GameEvents = {
                 Game.addMonster();
                 Game.addMonster();
                 Game.addBagger();
+            },
+            function(){
+                Game.addTurboGun();
             }
         ]
     },
     Finale: function(){
             GameEvents.FinaleTriggered = true;
+
+            Game.addTurboGun();
+
             for(var i = 0; i < 100; i++){
                 Game.addMonster();
             }

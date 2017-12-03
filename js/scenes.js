@@ -33,6 +33,16 @@ var assetsObj = {
             paddingY: 0,
             paddingAroundBorder: 0
         },
+        "sprites/turbogun.png" :{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_turbogun: [0,0]
+            },
+            paddingX: 0,
+            paddingY: 0,
+            paddingAroundBorder: 0
+        },
         "sprites/bloodspot.png" :{
             tile: 16,
             tileh: 16,
@@ -192,6 +202,8 @@ Crafty.scene('Game', function(){
     Game.addMonster(250, 150);
     Game.addMonster(200, 170);
     Game.addMonster(175, 130);
+
+    // Crafty.e("TurboGun").attr({x:75, y:150});
 
     // bag = Crafty.e('BaggerCharacter');
     // bag.x = 200;
