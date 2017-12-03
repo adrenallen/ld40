@@ -74,6 +74,9 @@ Crafty.c('PlayerCharacter', {
         this.reel("beat", 2000, [
             [0,4], [1,4], [2,4], [3,4],
             [1,4], [2,4], [3,4],
+            [1,4], [2,4], [3,4],
+            [1,4], [2,4], [3,4],
+            [1,4], [2,4], [3,4],
             [1,4], [2,4], [3,4]
         ]);
 
@@ -508,7 +511,7 @@ Crafty.c('MonsterCharacter1', {
             
         ]);
 
-        this.speed = 40;
+        this.speed = 45;
         
 
         this.findPlayerInterval = setInterval(function(mon){ mon.moveTowardsPlayer(); }, 100, this);
@@ -518,7 +521,7 @@ Crafty.c('MonsterCharacter1', {
             [0,0], [1,0], [2,0], [3,0]
         ]);
 
-        this.reel("attack", 1000, [
+        this.reel("attack", 750, [
             [0,2], [1,2], [2,2], [3,2]
         ]);
 

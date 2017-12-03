@@ -84,6 +84,7 @@ Crafty.c("GameIntroModal", {
         Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*3), y: (gameHeight/4)+(padding/2*9), z:1501}).text('Please see the github readme for more details!');
     
         Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
+        Game.reset();
     }
 });
 

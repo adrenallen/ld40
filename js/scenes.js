@@ -189,13 +189,13 @@ Crafty.scene('Game', function(){
     //     test.trigger('MoveTowardsPlayer');
     // }
     
-    Game.addMonster(100, 150);
+    Game.addMonster(250, 150);
     Game.addMonster(200, 170);
     Game.addMonster(175, 130);
 
-    bag = Crafty.e('BaggerCharacter');
-    bag.x = 200;
-    bag.y = 150;
+    // bag = Crafty.e('BaggerCharacter');
+    // bag.x = 200;
+    // bag.y = 150;
 
 
     // setInterval(function(){

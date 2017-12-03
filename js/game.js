@@ -108,6 +108,11 @@ GameDirector = {
             }            
         }else{
         }
+    },
+    reset: function(){
+        this.eventHistory = [];
+        this.lastPoll = [];
+        this.lastScoreEvent = 0;
     }
 };
 
@@ -175,6 +180,8 @@ KeyboardCB = {
                 Crafty('PlayerCharacter').get(0).attemptReviveBody();    
             }else if (e.key === Crafty.keys.C){
                 Crafty('PlayerCharacter').get(0).attemptBeatBody();    
+            }else if (e.key === Crafty.keys.P){
+                Crafty.pause(!Crafty.isPaused());
             }
         }catch(e){
             // console.log(e); //im ashamed of this

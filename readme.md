@@ -11,6 +11,7 @@ This game fits that theme by giving players the option to obtain temporary allie
 - E to inject antidote into a dead mutant (only green bodies can be revived)
 - C to destroy a body (beat to a pulp)
 - Mouse to aim, left click to shoot
+- P pauses and un-pauses
 
 
 ## Issues
@@ -38,6 +39,8 @@ This game fits that theme by giving players the option to obtain temporary allie
 
 
 ## Technical details
+This was my first ever Game Jam, and it was awesome!  I opted for the Compo to challenge myself and force more creativity by exploring every aspect of game dev (sounds I'm looking at you).
+
 I created this using CraftyJS (http://craftyjs.com/).  I had never used this library prior to this game, so I lost some time learning it, but what's the point of the LD if not to learn?
 
 http://sfbgames.com/chiptone was used for sfx creation.  Great tool for quick sounds.
