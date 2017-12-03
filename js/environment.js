@@ -78,6 +78,22 @@ Crafty.c('CarObject', {
     }
 });
 
+Crafty.c('BoxObject', {
+    required: "2D, Canvas, Collision, Solid, spr_box, Scrolls",
+    init: function(){
+        this.collision([
+            3,12,
+            3,6,
+            7,3,
+            12,5,
+            12,12,
+            8,15,
+            5,15,
+            
+        ]);
+    }
+});
+
 Crafty.c('SolidLeftPlayerOnly', {
     required: "2D, Canvas, Collision, Color",
     init: function(){

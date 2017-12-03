@@ -101,7 +101,7 @@ Crafty.c("GameOverModal", {
         
         //Game.scoreCalculator()
         score = Crafty.e("2D, Canvas, Text").attr({ x: 156+padding, y: 68+padding, z:1501}).text(0);
-        for( var i = 0; i < Game.scoreCalculator(); i++){
+        for( var i = 0; i <= Game.scoreCalculator(); i++){
             setTimeout(function(tx, scr){
                 return function(){
                     tx.text(scr + ' points');
@@ -115,7 +115,7 @@ Crafty.c("GameOverModal", {
         }
         //Game.fakeDistance();
         distance = Crafty.e("2D, Canvas, Text").attr({ x: 156+padding, y: 110+padding, z:1501}).text(0);
-        for( var i = 0; i < Game.fakeDistance(); i++){
+        for( var i = 0; i <= Game.fakeDistance(); i++){
             setTimeout(function(tx, scr){
                 return function(){
                     tx.text(scr + ' ft');

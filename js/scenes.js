@@ -135,6 +135,16 @@ var assetsObj = {
             paddingY: 0,
             paddingAroundBorder: 0
         },
+        "sprites/box.png":{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_box: [0,0],
+            },
+            paddingX: 0,
+            paddingY: 0,
+            paddingAroundBorder: 0
+        },
     },
     "audio":{
         "playerhurt": ['hurt.wav'],
@@ -230,7 +240,6 @@ Crafty.scene('Game', function(){
     // Game.addBagger(200, 150);
     
     // Game.addTurboGun(150,150);
-
     
     Game.clickTracker = Crafty.e("2D, Canvas, Mouse");
 

@@ -1,7 +1,11 @@
 const gameWidth = 350;
 const gameHeight = 250;
 const topWalkBound = 75;
-const maxMonsters = 150;
+const maxMonsters = {
+    'snek': 4,
+    'monster': 100,
+    'bagger': 3
+};
 
 Game = {
     levelProgress: 0,
@@ -15,7 +19,7 @@ Game = {
         Crafty.scene('Loading');
     },
     addMonster: function(x,y){
-        if(Crafty("MonsterActor").get().length > maxMonsters){
+        if(Crafty("MonsterCharacter1").get().length > maxMonsters.monster){
             return false;
         }else{
             monster = Crafty.e("MonsterCharacter1");
@@ -29,7 +33,7 @@ Game = {
         }
     },
     addBagger: function(x,y){
-        if(Crafty("MonsterActor").get().length > maxMonsters){
+        if(Crafty("BaggerCharacter").get().length > maxMonsters.bagger){
             return false;
         }else{
             monster = Crafty.e("BaggerCharacter");
@@ -43,7 +47,7 @@ Game = {
         }
     },
     addSnek: function(x,y){
-        if(Crafty("MonsterActor").get().length > maxMonsters){
+        if(Crafty("SnekCharacter").get().length > maxMonsters.snek){
             return false;
         }else{
             monster = Crafty.e("SnekCharacter");
@@ -60,6 +64,11 @@ Game = {
         car = Crafty.e('CarObject');
         car.x = gameWidth+(Math.random()*topWalkBound);
         car.y = (gameHeight*Math.random())+topWalkBound;
+    },
+    addBox: function(x,y){
+        obj = Crafty.e('BoxObject');
+        obj.x = gameWidth+(Math.random()*topWalkBound);
+        obj.y = (gameHeight*Math.random())+topWalkBound;
     },
     addTurboGun: function(x,y){
         gun = Crafty.e('TurboGun');
@@ -94,10 +103,11 @@ Game = {
     },
     reset: function(){
         GameDirector.reset();
-        this.levelProgress = 0;
-        this.monsterKillPoints = 0;
-        this.allyPoints = 0;
-        this.shooting = false;
+        Game.levelProgress = 0;
+        Game.monsterKillPoints = 0;
+        Game.allyPoints = 0;
+        Game.shooting = false;
+        // this.scoreDisplay.updateScore(0);
 
     }
     
@@ -114,6 +124,7 @@ GameDirector = {
     lastScoreEvent: 0,
     direct: function(){
         score = Game.scoreCalculator(); 
+
         if(score > GameDirector.lastScoreEvent+(Math.random()*GameDirector.eventPerScore)+(GameDirector.eventPerScore/4)){
             GameDirector.lastScoreEvent =  score;
 
@@ -140,9 +151,8 @@ GameDirector = {
 
     },
     reset: function(){
-        this.eventHistory = [];
-        this.lastPoll = [];
-        this.lastScoreEvent = 0;
+        GameDirector.lastScoreEvent = 0;
+        GameDirector.envLast = 0;
     }
 };
 
@@ -151,6 +161,11 @@ GameEvents = {
     Environment: [
         function(){
             Game.addCar();
+        },
+        function(){
+            Game.addBox();
+            Game.addBox();
+            Game.addBox();
         }
     ],
     Tiers: {
@@ -172,6 +187,14 @@ GameEvents = {
             function(){
                 if(Math.random() > 0.75){
                     Game.addTurboGun();
+                }else{
+                    Game.addMonster();
+                    Game.addMonster();
+                    Game.addMonster();
+                    Game.addMonster();
+                    Game.addMonster();
+                    Game.addMonster();
+                    Game.addMonster();
                 }
                 
             }
@@ -269,6 +292,8 @@ KeyboardCB = {
     },
     gameOverKeydown: function(e){
         if (e.key === Crafty.keys.ENTER){
+            Game.reset();
+            // Crafty.scene('Loading');
             Crafty.scene('Game');
         }
     }
