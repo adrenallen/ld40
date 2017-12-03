@@ -37,7 +37,7 @@ Crafty.c('BottomRoad', {
         this.y = 76;
         this.w = 700;
         this.h = 175;
-        this.z=0;
+        this.z=-1;
 
 
         this.bind('Move', function(e){
@@ -87,6 +87,14 @@ Crafty.c('SolidLeftPlayerOnly', {
 Crafty.c('SolidBottomPlayerOnly', {
     required: "2D, Canvas, Collision, Color",
     init: function(){
+    }
+});
+
+Crafty.c('BloodSpot', {
+    required: "2D, Canvas, spr_bloodspot, Scrolls",
+    init: function(){
+        this.origin('center');
+        console.log("building one");
     }
 });
 

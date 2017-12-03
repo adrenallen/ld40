@@ -33,6 +33,16 @@ var assetsObj = {
             paddingY: 0,
             paddingAroundBorder: 0
         },
+        "sprites/bloodspot.png" :{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_bloodspot: [0,0]
+            },
+            paddingX: 0,
+            paddingY: 0,
+            paddingAroundBorder: 0
+        },
         "sprites/monster1.png" :{
             tile: 16,
             tileh: 16,
@@ -177,9 +187,9 @@ Crafty.scene('Game', function(){
     Game.addMonster(200, 170);
     Game.addMonster(175, 130);
 
-    bag = Crafty.e('BaggerCharacter');
-    bag.x = 200;
-    bag.y = 150;
+    // bag = Crafty.e('BaggerCharacter');
+    // bag.x = 200;
+    // bag.y = 150;
 
 
     // setInterval(function(){
@@ -205,7 +215,7 @@ Crafty.scene('Game', function(){
         clearInterval(Game.shootInterval);
     });
 
-    cursor = Crafty('CursorAimer').get(0)
+    cursor = Crafty('CursorAimer').get(0);
 
     Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousemove", function(e){
         try{
@@ -218,14 +228,18 @@ Crafty.scene('Game', function(){
     });
 
     Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
-        if (e.key == Crafty.keys.E){
+        if (e.key === Crafty.keys.E){
             Crafty('PlayerCharacter').get(0).attemptReviveBody();    
+        }else if (e.key === Crafty.keys.C){
+            Crafty('PlayerCharacter').get(0).attemptBeatBody();    
         }
     });
 
     Crafty.e("2D, Keyboard").bind('KeyUp', function(e){
-        if (e.key == Crafty.keys.E){
+        if (e.key === Crafty.keys.E){
             Crafty('PlayerCharacter').get(0).stopAttemptReviveBody();    
+        }else if (e.key === Crafty.keys.C){
+            Crafty('PlayerCharacter').get(0).stopAttemptBeatBody();    
         }
     });
     

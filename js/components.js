@@ -67,6 +67,16 @@ Crafty.c('PlayerCharacter', {
             [0,2], [1,2], [2,2], [3,2]
         ]);
 
+        this.reel("death", 500, [
+            [0,3], [1,3], [2,3], [3,3]
+        ]);
+
+        this.reel("beat", 2000, [
+            [0,4], [1,4], [2,4], [3,4],
+            [1,4], [2,4], [3,4],
+            [1,4], [2,4], [3,4]
+        ]);
+
         // this.animate("run", -1);
         //TODO - some kind of timeout so you can only be hurt so many times a second
         
@@ -138,7 +148,7 @@ Crafty.c('PlayerCharacter', {
 
     fireBullet: function(e){
 
-        if(this.isPlaying('revive')){
+        if(this.isPlaying('revive') || this.isPlaying('beat')){
             return; //cant fire while reviving
         }
 
@@ -165,37 +175,77 @@ Crafty.c('PlayerCharacter', {
 
     //attempt to revive a body you are touching
     attemptReviveBody: function(){
-        if(this.isPlaying('revive')){
+        if(this.isPlaying('revive') || this.isPlaying('beat')){
             return; //can't revive we are already doing it
         }
-        this.checkHits('ReviveBody').bind('HitOn', function(hitData){
-            player = Crafty('PlayerCharacter').get(0);
-            
-            player.arms.visible = false;
-            
-            // player.resetMotion();
-            player.fourway(0.0000001);
-            player.animate("revive", 1);
-            
+        this.checkHits('ReviveBody').bind('HitOn', this.reviveBodyBind);
+    },
+    reviveBodyBind: function(hitData){
+        player = Crafty('PlayerCharacter').get(0);
+        
+        player.arms.visible = false;
+        
+        // player.resetMotion();
+        player.fourway(0.0000001);
+        player.animate("revive", 1);
+        
 
-            setTimeout(function(e){
-                return function(){
-                    e.revive();
-                    player = Crafty('PlayerCharacter').get(0);
-                    player.arms.visible=true;
-                    player.animate('idle', -1);
-                    player.fourway(movementSpeed);
-                };
-            }(hitData[0].obj), 1500);
+        setTimeout(function(e){
+            return function(){
+                e.revive();
+                player = Crafty('PlayerCharacter').get(0);
+                player.arms.visible=true;
+                player.animate('idle', -1);
+                player.fourway(movementSpeed);
+            };
+        }(hitData[0].obj), 1500);
 
 
-            //hitData[0].obj is the obj
-            
-        });
+        //hitData[0].obj is the obj
+        
+    },
+
+    //attempt to beat the body you are touching, removes it from the game
+    attemptBeatBody: function(){
+        if(this.isPlaying('beat') || this.isPlaying('revive')){
+            return; //can't revive we are already doing it
+        }
+        this.checkHits('Body').bind('HitOn', this.beatBodyBind);
+    },
+
+    beatBodyBind: function(hitData){
+        player = Crafty('PlayerCharacter').get(0);
+        
+        player.arms.visible = false;
+        
+        // player.resetMotion();
+        player.fourway(0.0000001);
+        player.animate("beat", 1);
+
+        setTimeout(function(e){
+            return function(){
+                Crafty.e('BloodSpot').attr({x: e.x, y: e.y});
+                e.destroy();
+                player = Crafty('PlayerCharacter').get(0);
+                player.arms.visible=true;
+                player.animate('idle', -1);
+                player.fourway(movementSpeed);
+            };
+        }(hitData[0].obj), 2000);
+
+
+        //hitData[0].obj is the obj
+        
     },
 
     stopAttemptReviveBody: function(){
+        this.unbind('HitOn', this.reviveBodyBind);
         this.ignoreHits('ReviveBody');
+    },
+
+    stopAttemptBeatBody: function(){
+        this.unbind('HitOn', this.beatBodyBind);
+        this.ignoreHits('Body');
     },
 
     takeBulletDamage: function(hitData){
@@ -216,9 +266,27 @@ Crafty.c('PlayerCharacter', {
         }
     },
     death: function(){
-        Crafty.scene('GameOver');
+        // Crafty.scene('GameOver');
+        playerBody = Crafty.e("PlayerBody");
+        playerBody.x = this.x;
+        playerBody.y = this.y;
+        this.destroy();
+        //TODO display the score and option to go back to main menu or quick restart
     }
 });
+
+Crafty.c('PlayerBody', {
+    required: "2D, Canvas, SpriteAnimation, spr_player, Body",
+    init: function(){
+        this.origin("center");
+        this.reel("death", 500, [
+            [0,3], [1,3], [2,3], [3,3]
+        ]);
+        this.animate("death", 1);
+    }
+
+});
+
 
 Crafty.c('Team1', {
 });
@@ -466,7 +534,7 @@ Crafty.c('MonsterCharacter1', {
                 this.unflip();
             }
         }catch(e){
-            clearInterval(this.findPlayerInterval);
+            // clearInterval(this.findPlayerInterval);
             console.log(e);
         }
     },
@@ -639,13 +707,7 @@ Crafty.c('PlayerBullet', {
 });
 
 
-Crafty.c('CursorAimer', {
-    required: "2D, Canvas, spr_cursor",
-    init: function(){
-        this.origin('center');
-        this.alpha = 0.4;
-    }
-});
+
 
 
 

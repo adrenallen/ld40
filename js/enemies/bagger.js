@@ -10,7 +10,7 @@ Crafty.c('BaggerCharacter', {
         this.bodiesBagged = 0;
         this.bodiesNeeded = 5;
         this.bodyHealthValue = 10;
-        this.health = 100;
+        this.health = 75;
         this.huntPeopleDistance = 50;
         this.pointValue = 100;
 
@@ -70,7 +70,9 @@ Crafty.c('BaggerCharacter', {
             this.x = e[0].obj.x;
             this.y = e[0].obj.y;
             if(this.reelPosition() == 11){
+                Crafty.e('BloodSpot').attr({x: e[0].obj.x, y: e[0].obj.y});
                 e[0].obj.destroy();
+
                 this.bodiesBagged++;
                 this.health+= this.bodyHealthValue;
             }
@@ -102,6 +104,7 @@ Crafty.c('BaggerCharacter', {
                 }else{
                     this.unflip();
                 }
+                
             }catch(e){
                 // clearInterval(this.findPlayerInterval);
                 console.log(e);

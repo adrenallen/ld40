@@ -1,6 +1,6 @@
 const gameWidth = 350;
 const gameHeight = 250;
-const topWalkBound = 0.45*gameHeight;
+const topWalkBound = 75;
 const maxMonsters = 3;
 
 Game = {
@@ -25,17 +25,28 @@ Game = {
             }
         }
     },
+    addBagger: function(x,y){
+        if(Crafty("MonsterActor").get().length > maxMonsters){
+            return false;
+        }else{
+            monster = Crafty.e("BaggerCharacter");
+            if (x && y){
+                monster.x = x;
+                monster.y = y;
+            }
+        }
+    },
     moveMap: function(v){
         moveThese = Crafty("Scrolls").get();
         for (var i = 0; i < moveThese.length; i++){
             moveThese[i].shift(-1*v,0,0,0);
         }
         this.levelProgress += v;
-        console.log(this.levelProgress);
-
+        Crafty('PlayerCharacter').get(0).scoreDisplay.updateScore(this.scoreCalculator());
+        // console.log(this.levelProgress);
+        GameDirector.checkForEvent(this.levelProgress);
     },
     difficultyCalculator: function(){
-
     },
     addMonsterKillPoints: function(points){
         this.monsterKillPoints += points;
@@ -46,7 +57,26 @@ Game = {
         Crafty('PlayerCharacter').get(0).scoreDisplay.updateScore(this.scoreCalculator());
     },
     scoreCalculator: function(){
-        return this.monsterKillPoints-this.allyPoints;
+        return Math.round(this.monsterKillPoints-this.allyPoints+this.levelProgress);
+    },
+    //fake distance is ~feet i think
+    fakeDistance: function(){
+        return Math.round(this.levelProgress/10);
     }
     
+};
+
+
+
+GameDirector = {
+    checkForEvent: function(progress){
+        if(progress > 1000){
+            Game.addBagger(gameWidth+100, Math.random()*gameHeight+topWalkBound);
+            Game.addBagger(gameWidth+100, Math.random()*gameHeight+topWalkBound);
+            Game.addMonster(gameWidth+75, Math.random()*gameHeight+topWalkBound);
+            Game.addMonster(gameWidth+50, Math.random()*gameHeight+topWalkBound);
+            Game.addMonster(gameWidth+60, Math.random()*gameHeight+topWalkBound);
+
+        }
+    }
 };

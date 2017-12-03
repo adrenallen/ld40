@@ -30,7 +30,7 @@ Crafty.c('PlayerHealthBar', {
 Crafty.c('PlayerScore', {
     required: "2D, Canvas,Text",
     init: function(){
-        this.scoreText = Crafty.e("2D, Canvas, Text").attr({ x: 275, y: 10, h: 12});
+        this.scoreText = Crafty.e("2D, Canvas, Text").attr({ x: 275, y: 10, h: 12}).textColor('white');;
         this.scoreText.z=1000;
         this.updateScore(0);
     },
@@ -56,5 +56,21 @@ Crafty.c('DamageOverlay', {
         setTimeout(function(e){
             Crafty('DamageOverlay').get(0).tween({ alpha:0 }, 200);
         }, 500);
+    }
+});
+
+Crafty.c("GameOverModal", {
+    required: "2D, Canvas, Color, Tween",
+    init: function(){
+
+    }
+});
+
+Crafty.c('CursorAimer', {
+    required: "2D, Canvas, spr_cursor",
+    init: function(){
+        this.origin('center');
+        this.alpha = 0.4;
+        this.z = 1000;
     }
 });
