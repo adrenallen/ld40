@@ -44,6 +44,16 @@ var assetsObj = {
             paddingY: 0,
             paddingAroundBorder: 0
         },
+        "sprites/bagger.png" :{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_bagger: [0,0],
+            },
+            paddingX: 0,
+            paddingY: 0,
+            paddingAroundBorder: 0
+        },
         "sprites/cursor.png" :{
             tile: 16,
             tileh: 16,
@@ -149,11 +159,15 @@ Crafty.scene('Game', function(){
     
     Game.addMonster(100, 150);
 
+    bag = Crafty.e('BaggerCharacter');
+    bag.x = 200;
+    bag.y = 150;
 
-    setInterval(function(){
-        Game.addMonster();
+
+    // setInterval(function(){
+    //     Game.addMonster();
         
-    }, 2000);
+    // }, 2000);
     
 
 

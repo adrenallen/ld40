@@ -155,7 +155,7 @@ Crafty.c('PlayerCharacter', {
         if(this.isPlaying('revive')){
             return; //can't revive we are already doing it
         }
-        this.checkHits('MonsterBodyActor').bind('HitOn', function(hitData){
+        this.checkHits('ReviveBody').bind('HitOn', function(hitData){
             player = Crafty('PlayerCharacter').get(0);
             
             player.arms.visible = false;
@@ -389,7 +389,10 @@ Crafty.c('MonsterCharacter1', {
         this.origin("center");
         this.damage = 25;
         this.z = 750;
-
+        this.health = 20;   
+        
+        this.onHit('Projectile', this.takeBulletDamage);
+        this.onHit('PlayerBullet', this.takeBulletDamage);
 
         this.collision([
             3,0,
@@ -447,7 +450,29 @@ Crafty.c('MonsterCharacter1', {
             }
         }catch(e){
             clearInterval(this.findPlayerInterval);
+            console.log(e);
         }
+    },
+    takeBulletDamage: function(hitData){
+        
+        this.health-=hitData[0].obj.attr('damage');
+        hitData[0].obj.destroy();
+        if (this.health < 1){
+            this.death();
+        }
+    },
+    death: function(){
+        this.destroy();
+        Crafty.audio.play('monsterdeath');
+        
+        monsterBody = Crafty.e("MonsterBody1");
+        
+        if(this['_flipX']){
+            monsterBody.flip();
+        }
+        monsterBody.x = this.x;
+        monsterBody.y = this.y;
+        // Crafty.e("MonsterCharacter1");
     }
 
 });
@@ -471,6 +496,13 @@ Crafty.c('Body', {
     }
 });
 
+Crafty.c('ReviveBody', {
+    required: "Scrolls, Body",
+    init: function(){
+        this.z = 1;
+    }
+});
+
 //dead bodies of monsters
 Crafty.c('AllyBodyActor', {
     required: "2D, Canvas, Collision",
@@ -482,7 +514,7 @@ Crafty.c('AllyBodyActor', {
 });
 
 Crafty.c('MonsterBody1', {
-    required: "2D, Canvas, MonsterBodyActor, SpriteAnimation, spr_monster1_body, Body",
+    required: "2D, Canvas, MonsterBodyActor, SpriteAnimation, spr_monster1_body, ReviveBody",
     init: function(){
         this.origin("center");
         this.reel("death", 500, [
@@ -496,10 +528,7 @@ Crafty.c('MonsterBody1', {
 Crafty.c('MonsterActor', {
     required: "2D, Canvas, Collision, Team2",
     init: function(){
-        this.health = 20;   
-
-        this.onHit('Projectile', this.takeBulletDamage);
-        this.onHit('PlayerBullet', this.takeBulletDamage);
+        
 
         this.onHit('Solid', function(e){
             hitData = e[0];
@@ -512,27 +541,6 @@ Crafty.c('MonsterActor', {
                 this[evt.axis] = evt.oldValue;
               }
         });
-    },
-    takeBulletDamage: function(hitData){
-        
-        this.health-=hitData[0].obj.attr('damage');
-        hitData[0].obj.destroy();
-        if (this.health < 1){
-            this.death();
-        }
-    },
-    death: function(){
-        this.destroy();
-        Crafty.audio.play('monsterdeath');
-        
-        monsterBody = Crafty.e("MonsterBody1");
-        
-        if(this['_flipX']){
-            monsterBody.flip();
-        }
-        monsterBody.x = this.x;
-        monsterBody.y = this.y;
-        // Crafty.e("MonsterCharacter1");
     }
 });
 
@@ -699,6 +707,25 @@ function findClosestTeam2(x,y){
         dist = distanceToEntity(x,y,team2[i]);
         if(closestDistance < 0 || closestDistance > dist){
             target = team2[i];
+            closestDistance = dist;
+        }
+    }
+
+    return target;
+}
+
+//find closets team1 (friendly) target
+function findClosestBody(x,y){
+    bodies = Crafty('Body').get();
+    // console.log(team1);
+
+    var target = null;
+    var closestDistance = -1;
+
+    for(var i = 0; i < bodies.length; i++){
+        dist = distanceToEntity(x,y,bodies[i]);
+        if(closestDistance < 0 || closestDistance > dist){
+            target = bodies[i];
             closestDistance = dist;
         }
     }
