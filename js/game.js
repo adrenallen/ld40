@@ -130,7 +130,6 @@ GameDirector = {
                 GameEvents.Tiers[tier][randEvent]();
             
             }
-            console.log(tier, score, randEvent);
         }else{
         }
     },
@@ -164,6 +163,27 @@ GameEvents = {
             },
             function(){
                 Game.addTurboGun();
+            }
+        ],
+        2: [
+            function(){
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addSnek();
+            }
+        ],
+        3: [
+            function(){
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addSnek();
+                Game.addSnek();
+                Game.addSnek();
+                Game.addBagger();
             }
         ]
     },

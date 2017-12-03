@@ -74,8 +74,10 @@ Crafty.c('SnekCharacter', {
         this.bind("MotionChange", function(mon){
             return function(){
                 if(mon.velocity().x !== 0 || mon.velocity().y !== 0){
-                    mon.animate("run", -1);
-                }else if(!mon.isPlaying('bag')){
+                    if(!mon.isPlaying('run')){
+                        mon.animate("run", -1);
+                    }                    
+                }else if(!mon.isPlaying('attack') && !mon.isPlaying('run')){
                     mon.animate("run", -1);
                 }
             };            
@@ -99,6 +101,7 @@ Crafty.c('SnekCharacter', {
             
             if(dist < this.meleeDistance){
 
+                
                 //close nuff to hit, move toward and melee attempt
                 this.velocity().x = delta.vx*this.speed;
                 this.velocity().y = delta.vy*this.speed;    
@@ -271,7 +274,7 @@ Crafty.c('SnekBomb', {
 });
 
 Crafty.c('SnekBombPool', {
-    required: "2D, Canvas, Motion, spr_snekbombpool, Collision, SpriteAnimation",
+    required: "2D, Canvas, Motion, spr_snekbombpool, Collision, SpriteAnimation, Scrolls",
     init: function(){
         this.origin('center');
         this.damage = 3;

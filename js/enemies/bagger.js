@@ -83,9 +83,13 @@ Crafty.c('BaggerCharacter', {
         this.bind("MotionChange", function(mon){
             return function(){
                 if(mon.velocity().x !== 0 || mon.velocity().y !== 0){
-                    mon.animate("run", -1);
+                    if(!mon.isPlaying('run')){
+                        mon.animate("run", -1);
+                    }                    
                 }else if(!mon.isPlaying('bag')){
-                    mon.animate("run", -1);
+                    if(!mon.isPlaying('run')){
+                        mon.animate("run", -1);
+                    }                    
                 }
             };            
         }(this));
@@ -96,7 +100,7 @@ Crafty.c('BaggerCharacter', {
 
         if(bodyTarget !== null){
             try{
-                
+
                 delta = findEntityDelta(this.x, this.y, bodyTarget);
                 this.velocity().x = delta.vx*this.speed;
                 this.velocity().y = delta.vy*this.speed;
