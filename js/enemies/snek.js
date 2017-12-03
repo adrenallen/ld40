@@ -8,11 +8,24 @@ Crafty.c('SnekCharacter', {
         this.damage = 30;
         this.z = 750;
         this.health = 85;
-        this.meleeDistance = 20;
-        this.pointValue = 150;
+        this.meleeDistance = 60;
 
-        
-        //TODO collision
+        this.rangeDistance = 150;
+
+        this.fireSpread = 25;
+
+        this.pointValue = 200;
+
+        this.collision([
+            6,1,
+            7,29,
+            23,31,
+            30,22,
+            18,22,
+            21,13,
+            21,0,
+        ]);
+
         // this.collision([
         //     2,6,
         //     8,4,
@@ -39,6 +52,10 @@ Crafty.c('SnekCharacter', {
 
         this.reel("attack", 500, [
             [0,1], [1,1], [2,1], [3,1]
+        ]);
+
+        this.reel("rangeattack", 1500, [
+            [0,1], [0,1], [1,1], [2,1], [3,1]
         ]);
 
         this.animate("run", -1);
@@ -77,42 +94,97 @@ Crafty.c('SnekCharacter', {
         team1Target = findClosestTeam1(this.x, this.y);
 
         try{
-            if(distanceToEntity(this.x, this.y, team1Target) < this.huntPeopleDistance){
-                delta = findEntityDelta(this.x, this.y, team1Target);
+            dist = distanceToEntity(this.x, this.y, team1Target);
+            delta = findEntityDelta(this.x, this.y, team1Target);
+            
+            if(dist < this.meleeDistance){
+
+                //close nuff to hit, move toward and melee attempt
                 this.velocity().x = delta.vx*this.speed;
-                this.velocity().y = delta.vy*this.speed;
+                this.velocity().y = delta.vy*this.speed;    
                 
                 if(delta.vx > 0){
                     this.flip();
                 }else{
                     this.unflip();
                 }
-            }else{
+            }else if(dist < this.rangeDistance){
+                //close enough to shoot at them, let's do that
                 //escape off screen until next body
+                
+                this.velocity().x = 0;
+                this.velocity().y = 0;
+
+                if(!this.isPlaying("rangeattack")){
+                    this.animate("rangeattack", 1);
+                    this.firingRange = false;
+                }
+
+                if(this.reelPosition() == 2 && !this.firingRange){
+                    this.shouldFire(team1Target.x, team1Target.y);
+                }else if (this.reelPosition() > 2){
+                    this.firingRange = false;
+                }
+
+
+
+                console.log("shoot");
+
+                // if(this.x < Crafty.viewport.width+this.huntPeopleDistance){
+                //     this.velocity().x = this.speed;
+                //     this.flip();
+                // }else{
+                
+                // }
+            }else if(!this.isPlaying("rangeattack")){
                 if(!this.isPlaying("run")){
                     this.animate("run", -1);
                 }
+                this.velocity().x = delta.vx*this.speed;
+                this.velocity().y = delta.vy*this.speed;    
                 
-                if(this.x < Crafty.viewport.width+this.huntPeopleDistance){
-                    this.velocity().x = this.speed;
-                    this.flip();
-                }else{
-                    this.velocity().x = 0;
-                    this.velocity().y = 0;
+                //move towards nearing team1
+            }else{
+                if(this.reelPosition() == 2 && !this.firingRange){
+                    this.shouldFire(team1Target.x, team1Target.y);
                 }
             }
+
+            if(this.velocity().x > 0){
+                this.flip();
+            }else if(this.velocity().x < 0){
+                this.unflip();
+            }
+
+
         }catch(e){
             console.log(e);
         }
-
-        // if(this.isPlaying("attack") && !this.hit('Team1')aaa && this.reelPosition() >= 3){
-        //     this.animate('idle', -1);
-        // }else if (this.isPlaying("attack")){
-        //     this.velocity().x = 0;
-        //     this.velocity().y = 0;
-        //     return;
-        // }
         
+    },
+    shouldFire: function(x,y){
+        this.firingRange = true;
+        for(var i = 0; i < 2; i++){
+            setTimeout(function(x,y,snek){
+                return function(){
+                    bomb = Crafty.e('SnekBomb');
+                    bomb.x = snek.x;
+                    bomb.y = snek.y;
+                    bomb.fireDirection(x, y);
+            
+                    bomb = Crafty.e('SnekBomb');
+                    bomb.x = snek.x;
+                    bomb.y = snek.y;
+                    bomb.fireDirection(x, y+snek.fireSpread);
+            
+                    bomb = Crafty.e('SnekBomb');
+                    bomb.x = snek.x;
+                    bomb.y = snek.y;
+                    bomb.fireDirection(x, y-snek.fireSpread);
+                };
+            }(x,y,this), i*100);
+            
+        }        
     },
     takeBulletDamage: function(hitData){
         
@@ -151,4 +223,51 @@ Crafty.c('SnekBody', {
         // this.height=this.height/8;
     }
 
+});
+
+Crafty.c('SnekBomb', {
+    required: "2D, Canvas, Motion, spr_snekbomb, Collision, SpriteAnimation, EnemyPro",
+    init: function(){
+        //TODO better sounds yo
+        Crafty.audio.play('defaultgun');
+        this.origin('center');
+        this.bulletSpeed = 250;
+        this.damage = 35;
+        this.z = 999;
+        this.collision([
+            4,10,
+            4,4,
+            13,3,
+            13,12,
+        ]);
+
+        this.reel('moving', 250, [
+            [0,0],[1,0],[2,0]
+        ]);
+
+        this.animate('moving', -1);
+
+        this.onHit('Team1', function(e){
+            hitData = e[0].obj;
+            hitData.takeDamage(this.damage);
+            this.destroy();
+        });
+    },
+    fireDirection: function(x,y){
+
+        calcs = calculateVXYRotation(x, y, this.attr('x'), this.attr('y'));
+
+        // this.attr({rotation: calcs.rotation});
+        // this.flip();
+        
+        //set velocity
+        this.velocity().x = calcs.vx*this.bulletSpeed;
+        this.velocity().y = calcs.vy*this.bulletSpeed;
+
+        if(this.velocity().x > 0){
+            this.flip();
+        }
+
+        
+    }
 });

@@ -84,6 +84,16 @@ var assetsObj = {
             paddingY: 0,
             paddingAroundBorder: 0
         },
+        "sprites/snekbomb.png" :{
+            tile: 16,
+            tileh: 16,
+            map: {
+                spr_snekbomb: [0,0],
+            },
+            paddingX: 0,
+            paddingY: 0,
+            paddingAroundBorder: 0
+        },
         "sprites/cursor.png" :{
             tile: 16,
             tileh: 16,
@@ -209,23 +219,17 @@ Crafty.scene('Game', function(){
     //     test.trigger('MoveTowardsPlayer');
     // }
     
-    test = Crafty.e('SnekCharacter').attr({x: 200, y:150});
-    test.animate('run', -1);
+    // test = Crafty.e('SnekCharacter').attr({x: 200, y:150});
+
+    Game.addSnek(200, 150);
     // Game.addMonster(250, 150);
     // Game.addMonster(200, 170);
     // Game.addMonster(175, 130);
 
-    // Crafty.e("TurboGun").attr({x:75, y:150});
+    // Game.addBagger(200, 150);
+    
+    // Game.addTurboGun(150,150);
 
-    bag = Crafty.e('BaggerCharacter');
-    bag.x = 200;
-    bag.y = 150;
-
-
-    // setInterval(function(){
-    //     Game.addMonster();
-        
-    // }, 2000);
     
     Game.clickTracker = Crafty.e("2D, Canvas, Mouse");
 
