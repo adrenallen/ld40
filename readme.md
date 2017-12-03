@@ -1,5 +1,7 @@
-# Nameless Game (as of now)
+# Mutoid
 ### By Garrett Allen
+
+![Mutoid Cover](/assets/cover.png "")
 
 ## Description
 This game was created for Ludum Dare 40 (Compo specifically).  The Theme was *The more you have, the worse it is*.
