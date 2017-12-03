@@ -95,62 +95,65 @@ Crafty.c('SnekCharacter', {
 
         team1Target = findClosestTeam1(this.x, this.y);
 
-        try{
-            dist = distanceToEntity(this.x, this.y, team1Target);
-            delta = findEntityDelta(this.x, this.y, team1Target);
-            
-            if(dist < this.meleeDistance){
+        if(typeof team1Target != 'undefined'){
 
+            try{
+                dist = distanceToEntity(this.x, this.y, team1Target);
+                delta = findEntityDelta(this.x, this.y, team1Target);
                 
-                //close nuff to hit, move toward and melee attempt
-                this.velocity().x = delta.vx*this.speed;
-                this.velocity().y = delta.vy*this.speed;    
-                
-                if(delta.vx > 0){
-                    this.flip();
+                if(dist < this.meleeDistance){
+
+                    
+                    //close nuff to hit, move toward and melee attempt
+                    this.velocity().x = delta.vx*this.speed;
+                    this.velocity().y = delta.vy*this.speed;    
+                    
+                    if(delta.vx > 0){
+                        this.flip();
+                    }else{
+                        this.unflip();
+                    }
+                }else if(dist < this.rangeDistance){
+                    //close enough to shoot at them, let's do that
+                    //escape off screen until next body
+                    
+                    this.velocity().x = 0;
+                    this.velocity().y = 0;
+
+                    if(!this.isPlaying("rangeattack")){
+                        this.animate("rangeattack", 1);
+                        this.firingRange = false;
+                    }
+
+                    if(this.reelPosition() == 2 && !this.firingRange){
+                        this.shouldFire(team1Target.x, team1Target.y);
+                    }else if (this.reelPosition() > 2){
+                        this.firingRange = false;
+                    }
+                }else if(!this.isPlaying("rangeattack")){
+                    if(!this.isPlaying("run")){
+                        this.animate("run", -1);
+                    }
+                    this.velocity().x = delta.vx*this.speed;
+                    this.velocity().y = delta.vy*this.speed;    
+                    
+                    //move towards nearing team1
                 }else{
+                    if(this.reelPosition() == 2 && !this.firingRange){
+                        this.shouldFire(team1Target.x, team1Target.y);
+                    }
+                }
+
+                if(this.velocity().x > 0){
+                    this.flip();
+                }else if(this.velocity().x < 0){
                     this.unflip();
                 }
-            }else if(dist < this.rangeDistance){
-                //close enough to shoot at them, let's do that
-                //escape off screen until next body
-                
-                this.velocity().x = 0;
-                this.velocity().y = 0;
 
-                if(!this.isPlaying("rangeattack")){
-                    this.animate("rangeattack", 1);
-                    this.firingRange = false;
-                }
 
-                if(this.reelPosition() == 2 && !this.firingRange){
-                    this.shouldFire(team1Target.x, team1Target.y);
-                }else if (this.reelPosition() > 2){
-                    this.firingRange = false;
-                }
-            }else if(!this.isPlaying("rangeattack")){
-                if(!this.isPlaying("run")){
-                    this.animate("run", -1);
-                }
-                this.velocity().x = delta.vx*this.speed;
-                this.velocity().y = delta.vy*this.speed;    
-                
-                //move towards nearing team1
-            }else{
-                if(this.reelPosition() == 2 && !this.firingRange){
-                    this.shouldFire(team1Target.x, team1Target.y);
-                }
+            }catch(e){
+                console.log(e);
             }
-
-            if(this.velocity().x > 0){
-                this.flip();
-            }else if(this.velocity().x < 0){
-                this.unflip();
-            }
-
-
-        }catch(e){
-            console.log(e);
         }
         
     },
