@@ -50,7 +50,6 @@ Game = {
         this.levelProgress += v;
         this.scoreDisplay.updateScore(this.scoreCalculator());
         // console.log(this.levelProgress);
-        GameDirector.checkForEvent(this.scoreCalculator);
     },
     difficultyCalculator: function(){
     },
@@ -68,6 +67,14 @@ Game = {
     //fake distance is ~feet i think
     fakeDistance: function(){
         return Math.round(this.levelProgress/10);
+    },
+    reset: function(){
+        GameDirector.reset();
+        this.levelProgress = 0;
+        this.monsterKillPoints = 0;
+        this.allyPoints = 0;
+        this.shooting = false;
+
     }
     
 };
@@ -75,10 +82,62 @@ Game = {
 
 GameDirector = {
     eventHistory: [],
-    eventDistanceMax: 300,
-    checkForEvent: function(progress){
-        // this.nextEvent = Math.random()*this.eventMultiplier
+    eventPerScore: 300,
+    tierScoreGap: 1000,
+    lastPoll: [],
+    lastScoreEvent: 0,
+    direct: function(){
+        score = Game.scoreCalculator(); 
+        if(score > GameDirector.lastScoreEvent+(Math.random()*GameDirector.eventPerScore)+(GameDirector.eventPerScore/4)){
+            GameDirector.lastScoreEvent =  score;
+
+            tier = Math.floor(score/GameDirector.tierScoreGap);
+            randEvent = Math.floor(Math.random()*GameEvents.Tiers[0].length);
+
+            console.log(tier, score, randEvent);
+            
+            if(typeof GameEvents.Tiers[tier] == 'undefined'){
+
+                // FINALE TIME BABY
+                if(!GameEvents.FinaleTriggered){
+                    GameEvents.Finale();
+                }                
+
+            }else{
+                GameEvents.Tiers[tier][randEvent]();
+            }            
+        }else{
+        }
     }
+};
+
+GameEvents = {
+    FinaleTriggered: false,
+    Tiers: {
+        0: [
+            function(){
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+            }
+        ],
+        1: [
+            function(){
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addMonster();
+                Game.addBagger();
+            }
+        ]
+    },
+    Finale: function(){
+            GameEvents.FinaleTriggered = true;
+            for(var i = 0; i < 100; i++){
+                Game.addMonster();
+            }
+        }
+    
 };
 
 KeyboardCB = {

@@ -2,7 +2,7 @@
 ### By Garrett Allen
 
 ## Description
-This game was created for Ludum Dare 40.  The Theme was *The more you have, the worse it is*.
+This game was created for Ludum Dare 40 (Compo specifically).  The Theme was *The more you have, the worse it is*.
 
 This game fits that theme by giving players the option to obtain temporary allies via an "antidote" to dead mutants.  When an ally is revived via this method, they convert back to being a monster after a small amount of time and come back as an even stronger enemy.  The idea was, you can use allies, but the more you have the worse the difficulty.
 
@@ -22,9 +22,14 @@ This game fits that theme by giving players the option to obtain temporary allie
 
 ## Planned features (In order of what will be worked on in the last day)
 - Game director-esque feature to send enemies as you progress through the level
-- Atleast one boss
-- Better menu graphics (Or like any sort of not eye bleed)
+- More objects to spawn in the road (some bullet blocking)
+- Bagger evolution implementation
+    - The bagger enemy (Guy that steals bodies) is supposed to morph into a stronger aggressive enemy when he gathers so many bodies.   Right now that second version of him is not done.
+- Snek implementation
+    - Basic drawing is in the assets folder for this, I feel like the game needs a ranged enemy which he will be if time permits
+- Atleast one boss 
 - Background music
+- Better menu graphics (Or like any sort of not eye bleed)
 - Local score tracking/leaderboard
 - Random events throughout level progression (i.e. helicopter crash)
 - Weapon pickups

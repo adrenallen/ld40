@@ -145,7 +145,7 @@ Crafty.scene('GameOver', function(){
 
 Crafty.scene('Game', function(){
     
-
+    setInterval(GameDirector.direct, 100);
     //add player to the game!
     this.player = Crafty.e("PlayerCharacter");
 

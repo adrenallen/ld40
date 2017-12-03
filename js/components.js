@@ -511,6 +511,18 @@ Crafty.c('MonsterCharacter1', {
                 this.reelPosition(2);
             }      
         });
+
+        this.onHit('Team2', function(e){
+            hitData = e[0];
+            if (hitData.type === 'SAT') { // SAT, advanced collision resolution
+                // move player back by amount of overlap
+                this.x -= hitData.overlap * hitData.normal.x;
+                this.y -= hitData.overlap * hitData.normal.y;
+              } else { // MBR, simple collision resolution
+                // move player to position before he moved (on respective axis)
+                this[evt.axis] = evt.oldValue;
+              }
+        });
         
     },
     moveTowardsPlayer: function(){
