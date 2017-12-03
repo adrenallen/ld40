@@ -197,51 +197,18 @@ Crafty.scene('Game', function(){
         
     // }, 2000);
     
+    Game.clickTracker = Crafty.e("2D, Canvas, Mouse");
 
+    Crafty.addEvent(Game.clickTracker, Crafty.stage.elem, "mousedown", KeyboardCB.mousedown);
 
-    
-    
-    this.clickTracker = Crafty.e("2D");
-
-    Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousedown", function(e){
-        Crafty('PlayerCharacter').get(0).fireBullet({offsetX: cursor.x, offsetY: cursor.y});
-        Game.shootInterval = setInterval(function(){
-            Crafty('PlayerCharacter').get(0).fireBullet({offsetX: cursor.x, offsetY: cursor.y});
-        }, 100, e);
-        
-    });
-
-    Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mouseup", function(e){
-        clearInterval(Game.shootInterval);
-    });
+    Crafty.addEvent(Game.clickTracker, Crafty.stage.elem, "mouseup", KeyboardCB.mouseup);
 
     cursor = Crafty('CursorAimer').get(0);
 
-    Crafty.addEvent(this.clickTracker, Crafty.stage.elem, "mousemove", function(e){
-        try{
-            Crafty('PlayerCharacterArms').get(0).pointToMouse(e);        
-            cursor.x = e.offsetX;
-            cursor.y = e.offsetY;
-        }catch(e){
-            console.log(e);
-        }
-    });
+    Crafty.addEvent(Game.clickTracker, Crafty.stage.elem, "mousemove", KeyboardCB.mousemove);
 
-    Crafty.e("2D, Keyboard").bind('KeyDown', function(e){
-        if (e.key === Crafty.keys.E){
-            Crafty('PlayerCharacter').get(0).attemptReviveBody();    
-        }else if (e.key === Crafty.keys.C){
-            Crafty('PlayerCharacter').get(0).attemptBeatBody();    
-        }
-    });
+    Crafty.e("2D, Keyboard").bind('KeyDown', KeyboardCB.keydown);
 
-    Crafty.e("2D, Keyboard").bind('KeyUp', function(e){
-        if (e.key === Crafty.keys.E){
-            Crafty('PlayerCharacter').get(0).stopAttemptReviveBody();    
-        }else if (e.key === Crafty.keys.C){
-            Crafty('PlayerCharacter').get(0).stopAttemptBeatBody();    
-        }
-    });
-    
+    Crafty.e("2D, Keyboard").bind('KeyUp', KeyboardCB.keyup);
 
 });

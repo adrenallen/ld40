@@ -43,7 +43,7 @@ Crafty.c('PlayerCharacter', {
 
 
         this.healthBar = Crafty.e('PlayerHealthBar');
-        this.scoreDisplay = Crafty.e('PlayerScore');
+        Game.scoreDisplay = Crafty.e('PlayerScore');
         this.healthBar.maxHealth = this.health;
         this.fireSpeed = 200;
         this.fireCooldown = false;
@@ -90,11 +90,11 @@ Crafty.c('PlayerCharacter', {
         this.bind("MotionChange", function(player){
             return function(){
                 if(player.velocity().x !== 0 || player.velocity().y !== 0){
-                    if(!player.isPlaying('run') && !player.isPlaying('revive')){
+                    if(!player.isPlaying('run') && !player.isPlaying('revive') && !player.isPlaying('beat')){
                         player.animate("run", -1);
                     }
                     
-                }else if(!player.isPlaying('revive')){
+                }else if(!player.isPlaying('revive') && !player.isPlaying('beat')){
                     player.animate("idle", -1);
                 }
             };            
@@ -232,9 +232,6 @@ Crafty.c('PlayerCharacter', {
                 player.fourway(movementSpeed);
             };
         }(hitData[0].obj), 2000);
-
-
-        //hitData[0].obj is the obj
         
     },
 
@@ -271,6 +268,8 @@ Crafty.c('PlayerCharacter', {
         playerBody.x = this.x;
         playerBody.y = this.y;
         this.destroy();
+
+        Crafty.e('GameOverModal');
         //TODO display the score and option to go back to main menu or quick restart
     }
 });
@@ -411,7 +410,7 @@ Crafty.c('AllyCharacter', {
             }
             
         }catch(e){
-            console.log('got error', e, 'clearing movement interval');
+            // console.log('got error', e, 'clearing movement interval');
             clearInterval(this.findPlayerInterval);
         }
     },
@@ -535,7 +534,7 @@ Crafty.c('MonsterCharacter1', {
             }
         }catch(e){
             // clearInterval(this.findPlayerInterval);
-            console.log(e);
+            // console.log(e);
         }
     },
     takeBulletDamage: function(hitData){
@@ -576,9 +575,18 @@ Crafty.c('AllyBody1', {
 });
 
 Crafty.c('Body', {
-    required: "Scrolls",
+    required: "Scrolls, Collision",
     init: function(){
         this.z = 1;
+
+        this.onHit('SolidLeftPlayerOnly', this.removeBody);
+
+    },
+    removeBody: function(e){
+        if(!entityInViewport(this)){
+            // this.destroy();
+        }
+        
     }
 });
 
