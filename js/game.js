@@ -184,7 +184,7 @@ GameDirector = {
                 randEvent = Math.floor(Math.random()*GameEvents.Tiers[tier].length);
                 GameEvents.Tiers[tier][randEvent]();
                 setTimeout(function(){
-                    Game.mapScrollEnabled = false;
+                    // Game.mapScrollEnabled = false;
                     GameDirector.mapScrollInt = GameDirector.lockMapUntilClear();
                 },2000);
             }
@@ -269,17 +269,17 @@ GameEvents = {
         ],
         2: [
             function(){
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
+                for(var i =0; i < 35; i++){
+                    Game.addMonster();
+                }
                 Game.addBagger();
             }
         ],
         3: [
             function(){
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
+                for(var i =0; i < 15; i++){
+                    Game.addMonster();
+                }
                 Game.addSnek();
             },
             function(){
@@ -288,59 +288,36 @@ GameEvents = {
                 Game.addMedkit();
             },
             function(){
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
+                for(var i =0; i < 35; i++){
+                    Game.addMonster();
+                }
                 Game.addBagger();
                 Game.addMedkit();
             }
         ],
         4: [
             function(){
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-
-                Game.addSnek();
+                for(var i =0; i < 35; i++){
+                    Game.addMonster();
+                }
                 Game.addSnek();
                 Game.addSnek();
             },
             function(){
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
+                for(var i =0; i < 50; i++){
+                    Game.addMonster();
+                }
             },
             function(){
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addMonster();
-                Game.addBagger();
-                Game.addAlly();
-                Game.addAlly();
+                for(var i =0; i < 25; i++){
+                    Game.addMonster();
+                }
+                for(var i =0; i < 2; i++){
+                    Game.addBagger();
+                }
+                for(var i =0; i < 2; i++){
+                    Game.addAlly();
+                }
             }
         ]
     },

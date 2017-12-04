@@ -117,7 +117,6 @@ Crafty.c('SnekCharacter', {
                 }else if(dist < this.rangeDistance && isOnScreen){
                     //close enough to shoot at them, let's do that
                     //escape off screen until next body
-                    console.log("shooting at him");
                     
                     this.velocity().x = 0;
                     this.velocity().y = 0;
