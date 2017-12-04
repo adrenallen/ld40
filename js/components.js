@@ -63,7 +63,7 @@ Crafty.c('PlayerCharacter', {
         // this.animate('idle', -1);
         
 
-        this.reel("revive", 1500, [
+        this.reel("revive", 1000, [
             [0,1], [1,1], [2,1], [3,1]
         ]);
 
@@ -75,7 +75,7 @@ Crafty.c('PlayerCharacter', {
             [0,3], [1,3], [2,3], [3,3]
         ]);
 
-        this.reel("beat", 2000, [
+        this.reel("beat", 1000, [
             [0,4], [1,4], [2,4], [3,4],
             [1,4], [2,4], [3,4],
             [1,4], [2,4], [3,4],
@@ -227,7 +227,7 @@ Crafty.c('PlayerCharacter', {
                 player.animate('idle', -1);
                 player.fourway(movementSpeed);
             };
-        }(hitData[0].obj), 1500);
+        }(hitData[0].obj), 1000);
 
 
         //hitData[0].obj is the obj
@@ -260,7 +260,7 @@ Crafty.c('PlayerCharacter', {
                 player.animate('idle', -1);
                 player.fourway(movementSpeed);
             };
-        }(hitData[0].obj), 2000);
+        }(hitData[0].obj), 1000);
         
     },
 

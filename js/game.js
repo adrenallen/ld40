@@ -223,9 +223,9 @@ GameEvents = {
             Game.addBox();
         },
         function(){
-            if(Math.random() > 0.80){
+            if(Math.random() > 0.85){
                 Game.addAlly();
-            }            
+            }        
         },
         function(){
             if(Math.random() > 0.90){
@@ -247,7 +247,6 @@ GameEvents = {
                 Game.addMonster();
                 Game.addMonster();
                 Game.addMonster();
-                Game.addAlly();
             },
             function(){
                 if(Math.random() > 0.75){
@@ -260,9 +259,6 @@ GameEvents = {
                     Game.addMonster();
                     Game.addMonster();
                     Game.addMonster();
-                    Game.addAlly();
-                    Game.addAlly();
-                    Game.addAlly();
                 }
                 
             }
@@ -314,9 +310,6 @@ GameEvents = {
                 }
                 for(var i =0; i < 2; i++){
                     Game.addBagger();
-                }
-                for(var i =0; i < 2; i++){
-                    Game.addAlly();
                 }
             }
         ]

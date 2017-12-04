@@ -195,6 +195,9 @@ Crafty.c("GameOverModal", {
         Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mousedown", KeyboardCB.mousedown);
         Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mouseup", KeyboardCB.mouseup);
 
+        //to unstick the fire interval
+        KeyboardCB.mouseup();
+
         Crafty.e("2D, Keyboard").unbind('KeyDown', KeyboardCB.keydown);
         Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
     }
