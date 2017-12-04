@@ -73,7 +73,7 @@ Crafty.c("GameIntroModal", {
         });
         this.image("assets/intro.png");
 
-        Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
+        Crafty.e("2D, Keyboard").bind('KeyDown', KeyboardCB.gameOverKeydown);
         Game.reset();
     }
 });
