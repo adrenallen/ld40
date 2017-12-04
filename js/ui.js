@@ -113,7 +113,7 @@ Crafty.c("GameWinModal", {
         
         distTO = 1;
         if(timeToDisplay < Game.fakeDistance()){
-            distTO = Math.round(timeToDisplay/Game.fakeDistance())
+            distTO = Math.round(timeToDisplay/Game.fakeDistance());
         }
         //Game.fakeDistance();
         distance = Crafty.e("2D, Canvas, Text").attr({ x: 156+padding, y: 110+padding, z:1501}).text(0);
@@ -127,14 +127,16 @@ Crafty.c("GameWinModal", {
 
         Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding), y: (gameHeight/3)-10, z:1501}).text('YOU WIN!').textColor('red');
 
-        KeyboardCB.mouseup();
-        
 
+        KeyboardCB.mouseup();
+        KeyboardCB.keyup();
+        
         Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mousedown", KeyboardCB.mousedown);
         Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mouseup", KeyboardCB.mouseup);
 
         Crafty.e("2D, Keyboard").unbind('KeyDown', KeyboardCB.keydown);
-        Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
+        Crafty.e("2D, Keyboard").unbind('KeyUp', KeyboardCB.keyup);
+        Crafty.e("2D, Keyboard").bind('KeyDown', KeyboardCB.gameOverKeydown);
     }
 });
 
@@ -159,7 +161,7 @@ Crafty.c("GameOverModal", {
 
         scrTO = 1;
         if(timeToDisplay < Game.scoreCalculator()){
-            scrTO = Math.round(timeToDisplay/Game.scoreCalculator())
+            scrTO = Math.round(timeToDisplay/Game.scoreCalculator());
         }
         
         //Game.scoreCalculator()
@@ -186,20 +188,17 @@ Crafty.c("GameOverModal", {
             }(distance, i), i*distTO);
         }
 
-        // Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: gameHeight/3, z:1501}).text('Game Over!');
-        // score = Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+padding, z:1501}).text(Game.scoreCalculator());
-        // Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+(padding*2), z:1501}).text('Distance travelled: '+ Game.fakeDistance() + "ft");
-        // Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding*2), y: (gameHeight/3)+(padding*4), z:1501}).text('Press Enter to play again');
         
+        //to unstick the fire interval
+        KeyboardCB.mouseup();
+        KeyboardCB.keyup();
 
         Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mousedown", KeyboardCB.mousedown);
         Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mouseup", KeyboardCB.mouseup);
 
-        //to unstick the fire interval
-        KeyboardCB.mouseup();
-
         Crafty.e("2D, Keyboard").unbind('KeyDown', KeyboardCB.keydown);
-        Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
+        Crafty.e("2D, Keyboard").unbind('KeyUp', KeyboardCB.keyup);
+        Crafty.e("2D, Keyboard").bind('KeyDown', KeyboardCB.gameOverKeydown);
     }
 });
 

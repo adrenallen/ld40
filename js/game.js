@@ -351,14 +351,19 @@ GameEvents = {
 KeyboardCB = {
     mousedown: function(e){
         try{
-            Crafty('PlayerCharacter').get(0).fireBullet({offsetX: cursor.x, offsetY: cursor.y});
+            player = Crafty('PlayerCharacter').get(0);
+            if (typeof player == 'undefined'){
+                return;
+            }
+            player.fireBullet({offsetX: cursor.x, offsetY: cursor.y});
             if(!Game.shooting){
                 Game.shooting = true;
                 Game.shootInterval = setInterval(function(){
                     player = Crafty('PlayerCharacter').get(0);
-                    if(typeof player != 'undefined'){
-                        player.fireBullet({offsetX: cursor.x, offsetY: cursor.y});
+                    if (typeof player == 'undefined'){
+                        return;
                     }
+                    player.fireBullet({offsetX: cursor.x, offsetY: cursor.y});
                 }, 100, e);
             }
         }catch(e){
@@ -375,38 +380,51 @@ KeyboardCB = {
         cursor.x = e.offsetX;
         cursor.y = e.offsetY;
         try{
-            Crafty('PlayerCharacterArms').get(0).pointToMouse(e);        
+            player = Crafty('PlayerCharacterArms').get(0);
+            if (typeof player == 'undefined'){
+                return;
+            }
+            player.pointToMouse(e);        
         }catch(e){
-            // console.log(e);
+            console.log(e);
         }
     },
     keydown: function(e){
         try{
+            player = Crafty('PlayerCharacter').get(0);
+            if (typeof player == 'undefined'){
+                return;
+            }
             if (e.key === Crafty.keys.E){
-                Crafty('PlayerCharacter').get(0).attemptReviveBody();    
+                player.attemptReviveBody();    
             }else if (e.key === Crafty.keys.C){
-                Crafty('PlayerCharacter').get(0).attemptBeatBody();    
+                player.attemptBeatBody();    
             }else if (e.key === Crafty.keys.P){
                 Crafty.pause(!Crafty.isPaused());
             }
         }catch(e){
-            // console.log(e); //im ashamed of this
+            console.log(e); //im ashamed of this
         }
     },
     keyup: function(e){
         try{
+            player = Crafty('PlayerCharacter').get(0);
+            if (typeof player == 'undefined'){
+                return;
+            }
             if (e.key === Crafty.keys.E){
-                Crafty('PlayerCharacter').get(0).stopAttemptReviveBody();    
+                player.stopAttemptReviveBody();    
             }else if (e.key === Crafty.keys.C){
-                Crafty('PlayerCharacter').get(0).stopAttemptBeatBody();    
+                player.stopAttemptBeatBody();    
             }
         }catch(e){
-            // console.log(e); //im ashamed of this
+            console.log(e); //im ashamed of this
         }
     },
     gameOverKeydown: function(e){
         if (e.key === Crafty.keys.ENTER){
             Game.reset();
+            Crafty.e("2D, Keyboard").unbind('KeyDown', KeyboardCB.gameOverKeydown);
             // Crafty.scene('Loading');
             Crafty.scene('Game');
         }
