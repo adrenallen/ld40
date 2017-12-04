@@ -250,7 +250,8 @@ Crafty.scene('Game', function(){
     this.player.x=25;
     this.player.y=150;
 
-    Game.addMonster(200,200);
+    Game.addMonster(350,250);
+    // Game.addBagger();
     // Game.addMedkit(200,200);
     //spawns allies
     // for(var i = 0; i < 10; i++){

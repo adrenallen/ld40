@@ -129,7 +129,8 @@ Crafty.c('BaggerCharacter', {
             }
 
             try{
-                if(distanceToEntity(this.x, this.y, team1Target) < this.huntPeopleDistance){
+                // if(distanceToEntity(this.x, this.y, team1Target) < this.huntPeopleDistance){
+                if(true){
                     delta = findEntityDelta(this.x, this.y, team1Target);
                     this.velocity().x = delta.vx*this.speed;
                     this.velocity().y = delta.vy*this.speed;

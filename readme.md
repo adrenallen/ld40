@@ -17,10 +17,8 @@ This game fits that theme by giving players the option to obtain temporary allie
 
 
 ## Issues
-- Bagger enemy has no sfx
-- Bagger run animations are hit or miss if they work
-- Allies do not have a run animation
 - The body beat functionality is extremely timid looking
+- Sound effects may be missing from some actions
 
 
 ## Planned features (In order of what will be worked on in the last day)
