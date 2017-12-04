@@ -265,7 +265,7 @@ GameEvents = {
         ],
         2: [
             function(){
-                for(var i =0; i < 35; i++){
+                for(var i =0; i < 25; i++){
                     Game.addMonster();
                 }
                 Game.addBagger();
@@ -293,14 +293,14 @@ GameEvents = {
         ],
         4: [
             function(){
-                for(var i =0; i < 35; i++){
+                for(var i =0; i < 25; i++){
                     Game.addMonster();
                 }
                 Game.addSnek();
                 Game.addSnek();
             },
             function(){
-                for(var i =0; i < 50; i++){
+                for(var i =0; i < 40; i++){
                     Game.addMonster();
                 }
             },
