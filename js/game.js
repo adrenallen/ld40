@@ -21,7 +21,7 @@ Game = {
         Crafty.scene('Loading');
     },
     addMonster: function(x,y){
-        if(Crafty("MonsterCharacter1").get().length > maxMonsters.monster && !GameEvents.FinaleTriggered){
+        if(Crafty("MonsterCharacter1").get().length >= maxMonsters.monster && !GameEvents.FinaleTriggered){
             return false;
         }else{
             monster = Crafty.e("MonsterCharacter1");
@@ -46,7 +46,7 @@ Game = {
         obj.trigger('MoveTowardsPlayer');
     },
     addBagger: function(x,y){
-        if(Crafty("BaggerCharacter").get().length > maxMonsters.bagger && !GameEvents.FinaleTriggered){
+        if(Crafty("BaggerCharacter").get().length >= maxMonsters.bagger && !GameEvents.FinaleTriggered){
             return false;
         }else{
             monster = Crafty.e("BaggerCharacter");
@@ -60,7 +60,7 @@ Game = {
         }
     },
     addSnek: function(x,y){
-        if(Crafty("SnekCharacter").get().length > maxMonsters.snek && !GameEvents.FinaleTriggered){
+        if(Crafty("SnekCharacter").get().length >= maxMonsters.snek && !GameEvents.FinaleTriggered){
             return false;
         }else{
             monster = Crafty.e("SnekCharacter");
@@ -265,7 +265,7 @@ GameEvents = {
         ],
         2: [
             function(){
-                for(var i =0; i < 25; i++){
+                for(var i =0; i < 5; i++){
                     Game.addMonster();
                 }
                 Game.addBagger();
@@ -273,7 +273,7 @@ GameEvents = {
         ],
         3: [
             function(){
-                for(var i =0; i < 15; i++){
+                for(var i =0; i < 10; i++){
                     Game.addMonster();
                 }
                 Game.addSnek();
@@ -284,7 +284,7 @@ GameEvents = {
                 Game.addMedkit();
             },
             function(){
-                for(var i =0; i < 35; i++){
+                for(var i =0; i < 10; i++){
                     Game.addMonster();
                 }
                 Game.addBagger();
@@ -293,19 +293,19 @@ GameEvents = {
         ],
         4: [
             function(){
-                for(var i =0; i < 25; i++){
+                for(var i =0; i < 15; i++){
                     Game.addMonster();
                 }
                 Game.addSnek();
                 Game.addSnek();
             },
             function(){
-                for(var i =0; i < 40; i++){
+                for(var i =0; i < 2; i++){
                     Game.addMonster();
                 }
             },
             function(){
-                for(var i =0; i < 25; i++){
+                for(var i =0; i < 15; i++){
                     Game.addMonster();
                 }
                 for(var i =0; i < 2; i++){
