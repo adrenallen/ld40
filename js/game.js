@@ -13,6 +13,7 @@ Game = {
     allyPoints: 0,
     collectedBodies: 0,
     shooting: false,
+    mapScrollEnabled: true,
     start: function(){
         Crafty.init(gameWidth,gameHeight);
         Crafty.background('gray');
@@ -79,7 +80,7 @@ Game = {
     },
     addBox: function(x,y){
         obj = Crafty.e('BoxObject');
-        if (x && y){
+        if (x && y){        // console.log(this.levelProgress);
             obj.x = x;
             obj.y = y;
         }else{
@@ -113,13 +114,16 @@ Game = {
         }
     },
     moveMap: function(v){
+        if(!this.mapScrollEnabled){
+            return; //map scroll disabled for finale
+        }
+
         moveThese = Crafty("Scrolls").get();
         for (var i = 0; i < moveThese.length; i++){
             moveThese[i].shift(-1*v,0,0,0);
         }
         this.levelProgress += v;
         this.scoreDisplay.updateScore(this.scoreCalculator());
-        // console.log(this.levelProgress);
     },
     difficultyCalculator: function(){
     },
@@ -160,6 +164,7 @@ GameDirector = {
     envLast: 0,
     lastPoll: [],
     lastScoreEvent: 0,
+    mapScrollInt: false,
     direct: function(){
         score = Game.scoreCalculator(); 
 
@@ -178,6 +183,10 @@ GameDirector = {
             }else{
                 randEvent = Math.floor(Math.random()*GameEvents.Tiers[tier].length);
                 GameEvents.Tiers[tier][randEvent]();
+                setTimeout(function(){
+                    Game.mapScrollEnabled = false;
+                    GameDirector.mapScrollInt = GameDirector.lockMapUntilClear();
+                },2000);
             }
         }
 
@@ -187,6 +196,14 @@ GameDirector = {
         }
 
 
+    },
+    lockMapUntilClear: function(){
+        setInterval(function(){
+            if(Crafty('MonsterActor').get().length < 1){
+                clearInterval(GameDirector.mapScrollInt);
+                Game.mapScrollEnabled = true;
+            }
+        },500);
     },
     reset: function(){
         GameDirector.lastScoreEvent = 0;
@@ -332,7 +349,10 @@ GameEvents = {
 
             Game.addTurboGun();
 
-            
+            for(var i = 0; i <= Game.collectedBodies; i++){
+                //spawn end game monster that is tuff
+            }
+
             for(var i = 0; i < 75; i++){
                 Game.addMonster();
             }
@@ -344,6 +364,16 @@ GameEvents = {
             for(var i = 0; i < 6; i++){    
                 Game.addSnek();
             }
+
+            setTimeout(function(){
+                Game.mapScrollEnabled = false;
+                GameDirector.mapScrollInt = setInterval(function(){
+                    if(Crafty('MonsterActor').get().length < 1){
+                        clearInterval(GameDirector.mapScrollInt);
+                        Crafty.e('GameWinModal');
+                    }
+                },500);
+            },2000);
         }
     
 };

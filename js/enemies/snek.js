@@ -101,7 +101,8 @@ Crafty.c('SnekCharacter', {
                 dist = distanceToEntity(this.x, this.y, team1Target);
                 delta = findEntityDelta(this.x, this.y, team1Target);
                 
-                if(dist < this.meleeDistance){
+                isOnScreen = entityInViewport(this);
+                if(dist < this.meleeDistance && isOnScreen){
 
                     
                     //close nuff to hit, move toward and melee attempt
@@ -113,9 +114,10 @@ Crafty.c('SnekCharacter', {
                     }else{
                         this.unflip();
                     }
-                }else if(dist < this.rangeDistance){
+                }else if(dist < this.rangeDistance && isOnScreen){
                     //close enough to shoot at them, let's do that
                     //escape off screen until next body
+                    console.log("shooting at him");
                     
                     this.velocity().x = 0;
                     this.velocity().y = 0;

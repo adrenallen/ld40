@@ -78,6 +78,67 @@ Crafty.c("GameIntroModal", {
     }
 });
 
+Crafty.c("GameWinModal", {
+    required: "2D, Canvas, Image, Mouse",
+    init: function(){
+        Crafty.audio.pause('background');
+        Crafty.audio.play('heal');
+        padding = 25;
+        this.attr({
+            x: padding,
+            y: padding,
+            h: gameHeight-(padding*2),
+            w: gameWidth-(padding*2),
+            z: 1500,
+            alpha: 0.9
+        });
+        this.image("assets/gameover.png");
+
+        timeToDisplay = 2500;
+
+        scrTO = 1;
+        if(timeToDisplay < Game.scoreCalculator()){
+            scrTO = Math.round(timeToDisplay/Game.scoreCalculator())
+        }
+        
+        //Game.scoreCalculator()
+        score = Crafty.e("2D, Canvas, Text").attr({ x: 156+padding, y: 68+padding, z:1501}).text(0);
+        for( var i = 0; i <= Game.scoreCalculator(); i++){
+            setTimeout(function(tx, scr){
+                return function(){
+                    tx.text(scr + ' points');
+                };
+            }(score, i), i*scrTO);
+        }
+        
+        distTO = 1;
+        if(timeToDisplay < Game.fakeDistance()){
+            distTO = Math.round(timeToDisplay/Game.fakeDistance())
+        }
+        //Game.fakeDistance();
+        distance = Crafty.e("2D, Canvas, Text").attr({ x: 156+padding, y: 110+padding, z:1501}).text(0);
+        for( var i = 0; i <= Game.fakeDistance(); i++){
+            setTimeout(function(tx, scr){
+                return function(){
+                    tx.text(scr + ' ft');
+                };
+            }(distance, i), i*distTO);
+        }
+
+        Crafty.e("2D, Canvas, Text").attr({ x: (gameWidth/2)-(padding), y: (gameHeight/3)-10, z:1501}).text('YOU WIN!').textColor('red');
+
+        KeyboardCB.mouseup();
+        
+
+        Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mousedown", KeyboardCB.mousedown);
+        Crafty.removeEvent(Game.clickTracker, Crafty.stage.elem, "mouseup", KeyboardCB.mouseup);
+
+        Crafty.e("2D, Keyboard").unbind('KeyDown', KeyboardCB.keydown);
+        Crafty.e("2D, Keyboard").one('KeyDown', KeyboardCB.gameOverKeydown);
+    }
+});
+
+
 Crafty.c("GameOverModal", {
     required: "2D, Canvas, Image, Mouse",
     init: function(){

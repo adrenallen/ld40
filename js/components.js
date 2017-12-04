@@ -140,11 +140,24 @@ Crafty.c('PlayerCharacter', {
               }
         });
 
+        this.onHit('SolidRightPlayerOnly', function(e){
+            hitData = e[0];
+            if (hitData.type === 'SAT') { // SAT, advanced collision resolution
+                // move player back by amount of overlap
+                this.x -= Math.abs(hitData.overlap * hitData.normal.x);
+              } else { // MBR, simple collision resolution
+                // move player to position before he moved (on respective axis)
+                // this[evt.axis] = evt.oldValue;
+              }
+        });
+
         this.onHit('MoveBox', function(e){
             hitData = e[0];
             if (hitData.type === 'SAT') { // SAT, advanced collision resolution
                 // move player back by amount of overlap
-                this.x -= hitData.overlap * hitData.normal.x;
+                if(Game.mapScrollEnabled){
+                    this.x -= Math.abs(hitData.overlap * hitData.normal.x);
+                }
                 Game.moveMap(hitData.overlap * hitData.normal.x);
               } 
         });
@@ -584,7 +597,7 @@ Crafty.c('MonsterCharacter1', {
         if( typeof team1Target == 'undefined'){
             return;
         }
-        
+
         if(this.isPlaying("attack") && !this.hit('Team1') && this.reelPosition() >= 3){
             this.animate('idle', -1);
         }else if (this.isPlaying("attack")){

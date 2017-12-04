@@ -100,6 +100,12 @@ Crafty.c('SolidLeftPlayerOnly', {
     }
 });
 
+Crafty.c('SolidRightPlayerOnly', {
+    required: "2D, Canvas, Collision, Color",
+    init: function(){
+    }
+});
+
 Crafty.c('SolidBottomPlayerOnly', {
     required: "2D, Canvas, Collision, Color",
     init: function(){

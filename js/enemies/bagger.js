@@ -124,6 +124,9 @@ Crafty.c('BaggerCharacter', {
             }
 
             team1Target = findClosestTeam1(this.x, this.y);
+            if(typeof team1Target == 'undefined'){
+                return;
+            }
 
             try{
                 if(distanceToEntity(this.x, this.y, team1Target) < this.huntPeopleDistance){

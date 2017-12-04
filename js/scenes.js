@@ -230,6 +230,13 @@ Crafty.scene('Game', function(){
     leftBound.y = -5;
     leftBound.color('red');
 
+    leftBound = Crafty.e("SolidRightPlayerOnly");
+    leftBound.w = 5;
+    leftBound.h = 310;
+    leftBound.x = 350;
+    leftBound.y = -5;
+    leftBound.color('red');
+
     
     Crafty.e("CursorAimer");
     Crafty.e("DamageOverlay");
@@ -238,6 +245,7 @@ Crafty.scene('Game', function(){
     car = Crafty.e('CarObject');
     car.x = 200;
     car.y = 150;
+
 
     this.player.x=25;
     this.player.y=150;
