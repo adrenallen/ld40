@@ -299,7 +299,7 @@ Crafty.c('PlayerCharacter', {
         this.healthBar.adjustHealthBar(this.health);        
     },
     death: function(){
-        // Crafty.scene('GameOver');
+        
         playerBody = Crafty.e("PlayerBody");
         playerBody.x = this.x;
         playerBody.y = this.y;
