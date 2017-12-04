@@ -17,6 +17,8 @@ Everything in this game was created **from scratch** between 9PM Friday (Decembe
 - Mouse to aim, left click to shoot
 - P pauses and un-pauses
 
+## Post submit changelog
+- Fixed keylistener on intro screen to keep listening for enter key even after other keys are pressed first
 
 ## Issues
 - The body beat functionality is extremely timid looking
