@@ -2,7 +2,7 @@ const gameWidth = 350;
 const gameHeight = 250;
 const topWalkBound = 75;
 const maxMonsters = {
-    'snek': 4,
+    'snek': 3,
     'monster': 100,
     'bagger': 3
 };
@@ -280,7 +280,6 @@ GameEvents = {
             },
             function(){
                 Game.addSnek();
-                Game.addSnek();
                 Game.addMedkit();
             },
             function(){
@@ -296,7 +295,6 @@ GameEvents = {
                 for(var i =0; i < 15; i++){
                     Game.addMonster();
                 }
-                Game.addSnek();
                 Game.addSnek();
             },
             function(){
